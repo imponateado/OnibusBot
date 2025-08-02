@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "W7Hboq7cDZw=",
+  "success": true,
+  "projectFilePath": "/home/leonardo/RiderProjects/OnibusBot/OnibusBot/OnibusBot.csproj",
+  "expectedPackageFiles": [
+    "/home/leonardo/.nuget/packages/microsoft.aspnetcore.app.ref/9.0.7/microsoft.aspnetcore.app.ref.9.0.7.nupkg.sha512"
+  ],
+  "logs": []
+}
