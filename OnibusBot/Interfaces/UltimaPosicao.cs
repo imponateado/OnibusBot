@@ -8,7 +8,7 @@ public class UltimaPosicao
     public string Type { get; set; }
     
     [JsonPropertyName("features")]
-    public UtimaFeature Features { get; set; }
+    public List<UtimaFeature> Features { get; set; }
     
     [JsonPropertyName("totalFeatures")]
     public int? TotalFeatures { get; set; }
@@ -38,7 +38,7 @@ public class UtimaFeature
     public UtimaFeatureGeometry Geometry { get; set; }
     
     [JsonPropertyName("geometry_name")]
-    public string GeometryName { get; set; }
+    public string? GeometryName { get; set; }
     
     [JsonPropertyName("properties")]
     public UtimaFeatureProperty Properties { get; set; }
@@ -53,13 +53,13 @@ public class UtimaFeatureProperty
     public string? Prefixo { get; set; }
     
     [JsonPropertyName("datalocal")]
-    public DateTime? DataLocal { get; set; }
+    public string? DataLocal { get; set; }
     
     [JsonPropertyName("velocidade")]
-    public int? Velocidade { get; set; }
+    public string? Velocidade { get; set; }
     
     [JsonPropertyName("cd_linha")]
-    public double? Linha { get; set; }
+    public string? Linha { get; set; }
     
     [JsonPropertyName("direcao")]
     public string? Direcao { get; set; }
@@ -71,13 +71,13 @@ public class UtimaFeatureProperty
     public double? Longitude { get; set; }
     
     [JsonPropertyName("dataregistro")]
-    public DateTime? DataRegistro { get; set; }
+    public string? DataRegistro { get; set; }
     
     [JsonPropertyName("imei")]
-    public int? IMEI { get; set; }
+    public string? IMEI { get; set; }
     
     [JsonPropertyName("sentido")]
-    public int? Sentido { get; set; }
+    public string? Sentido { get; set; }
 }
 
 public class UtimaFeatureGeometry

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("OnibusBot")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6c14900be41856aa9d63e532abc8533f767d4024")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+080c5084fecfda7850986f11416a6871942470cc")]
 [assembly: System.Reflection.AssemblyProductAttribute("OnibusBot")]
 [assembly: System.Reflection.AssemblyTitleAttribute("OnibusBot")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
