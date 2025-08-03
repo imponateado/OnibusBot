@@ -24,10 +24,10 @@ namespace OnibusBot
                 paradasDeOnibus = convertStuff.ConverterParadasCoords(paradasDeOnibus).Result;
                 
                 var teste1 = linhasDeOnibus.Features.First();
-                var teste2 = teste1.GeometryParadas.Coordinates.First();
+                var teste2 = teste1.Geometry.Coordinates.First();
 
                 var teste3 = paradasDeOnibus.Features.First();
-                var teste4 = teste3.GeometryParadas.Coordinates.First();
+                var teste4 = teste3.Geometry.Coordinates.First();
                 
                 Console.WriteLine($"Teste se tá tudo ocorrendo como esperado: {teste2}");
                 Console.WriteLine($"Teste se tá tudo ocorrendo como esperado: {teste4}");

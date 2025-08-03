@@ -2,13 +2,13 @@ using System.Text.Json.Serialization;
 
 namespace OnibusBot.Interfaces;
 
-public class ParadasDeOnibus
+public class LinhasDeOnibus
 {
     [JsonPropertyName(("type"))]
     public string Type { get; set; }
     
     [JsonPropertyName("features")]
-    public IEnumerable<ParadasFeature> Features { get; set; }
+    public IEnumerable<LinhasFeature> Features { get; set; }
     
     [JsonPropertyName("totalFeatures")]
     public int? TotalFeatures { get; set; }
@@ -23,10 +23,10 @@ public class ParadasDeOnibus
     public string?  TimeStamp { get; set; }
     
     [JsonPropertyName("crs")]
-    public ParadasCrs Crs { get; set; }
+    public LinhasCrs Crs { get; set; }
 }
 
-public class ParadasFeature
+public class LinhasFeature
 {
     [JsonPropertyName("type")]
     public string? Type { get; set; }
@@ -35,52 +35,67 @@ public class ParadasFeature
     public string? Id { get; set; }
     
     [JsonPropertyName("geometry")]
-    public ParadaFeatureGeometry Geometry { get; set; }
+    public LinhasFeatureGeometry Geometry { get; set; }
     
     [JsonPropertyName("geometry_name")]
     public string GeometryName { get; set; }
     
     [JsonPropertyName("properties")]
-    public ParadasFeatureProperty Properties { get; set; }
+    public LinhasFeatureProperty Properties { get; set; }
 }
 
-public class ParadasFeatureProperty
+public class LinhasFeatureProperty
 {
-    [JsonPropertyName("parada")]
-    public string? Parada { get; set; }
+    [JsonPropertyName("id")]
+    public int? Id { get; set; }
     
-    [JsonPropertyName("descricao")]
-    public string? Descricao { get; set; }
+    [JsonPropertyName("linha")]
+    public string? Linha { get; set; }
+    
+    [JsonPropertyName("nome")]
+    public string? Nome { get; set; }
+    
+    [JsonPropertyName("sentido")]
+    public string? Sentido { get; set; }
+    
+    [JsonPropertyName("faixa_tarifaria")]
+    public string? FaixaTarifaria { get; set; }
+    
+    [JsonPropertyName("tarifa")]
+    public double? Tarifa { get; set; }
     
     [JsonPropertyName("situacao")]
     public string? Situacao { get; set; }
     
-    [JsonPropertyName("estrutura_de_paragem")]
-    public string? EstruturaDeParagem { get; set; }
+    [JsonPropertyName("bacia")]
+    public int? Bacia { get; set; }
     
-    [JsonPropertyName("tipo")]
-    public string? Tipo { get; set; }
+    [JsonPropertyName("tipo_da_linha")]
+    public string? TipoDaLinha { get; set; }
+    
+    [JsonPropertyName("situacao_da_linha")]
+    public bool? SituacaoDaLinha { get; set; }
 }
 
-public class ParadaFeatureGeometry
+public class LinhasFeatureGeometry
 {
     [JsonPropertyName("type")]
     public string? Type { get; set; }
     
     [JsonPropertyName("coordinates")]
-    public List<double> Coordinates { get; set; }
+    public List<List<double>> Coordinates { get; set; }
 }
 
-public class ParadasCrs
+public class LinhasCrs
 {
     [JsonPropertyName("type")]
     public string? Type { get; set; }
     
     [JsonPropertyName("properties")]
-    public ParadasCrsProperty Properties { get; set; }
+    public LinhasCrsProperty Properties { get; set; }
 }
 
-public class ParadasCrsProperty
+public class LinhasCrsProperty
 {
     [JsonPropertyName("name")]
     public string? Name { get; set; }

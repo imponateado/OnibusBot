@@ -4,38 +4,35 @@ namespace OnibusBot.Utils;
 
 public class ConvertStuff : CoordConverter
 {
-    public Task<ParadasDeOnibusResponseParadas> ConverterParadasCoords(ParadasDeOnibusResponseParadas paradasDeOnibus)
+    public Task<ParadasDeOnibus> ConverterParadasCoords(ParadasDeOnibus paradasDeOnibus)
     {
         foreach (var feature in paradasDeOnibus.Features)
         {
-            var utmCoords2 = feature.GeometryParadas.Coordinates;
-
-            var utmCoords = utmCoords2[0];
+            var utmCoords = feature.Geometry.Coordinates;
 
             if (utmCoords == null || utmCoords.Count < 2)
                 continue;
 
-            var easting = (double)utmCoords[0];
-            var northing = (double)utmCoords[1];
+            var easting = utmCoords[0];
+            var northing = utmCoords[1];
 
             var coords = UTMToLatLon(easting, northing, 23, true);
             var lat = coords[0];
             var lon = coords[1];
 
-            var resultCoords2 = new List<double>() { lon, lat };
-            var resultCoords = new List<List<double>>() { resultCoords2 };
+            var resultCoords = new List<double>() { lon, lat };
 
-            feature.GeometryParadas.Coordinates = resultCoords;
+            feature.Geometry.Coordinates = resultCoords;
         }
 
-        return Task.FromResult<ParadasDeOnibusResponseParadas>(paradasDeOnibus);
+        return Task.FromResult<ParadasDeOnibus>(paradasDeOnibus);
     }
 
-    public Task<LinhasDeOnibusResponseParadas> ConverterLinhasDeOnibusCoords(LinhasDeOnibusResponseParadas linhasDeOnibus)
+    public Task<LinhasDeOnibus> ConverterLinhasDeOnibusCoords(LinhasDeOnibus linhasDeOnibus)
     {
         foreach (var feature in linhasDeOnibus.Features)
         {
-            var utmCoords = feature.GeometryParadas.Coordinates;
+            var utmCoords = feature.Geometry.Coordinates;
             var newUtmCoords = new List<List<double>>();
 
             foreach (var coord in utmCoords)
@@ -58,7 +55,7 @@ public class ConvertStuff : CoordConverter
                 newUtmCoords.Add(newCoords);
             }
 
-            feature.GeometryParadas.Coordinates = newUtmCoords;
+            feature.Geometry.Coordinates = newUtmCoords;
         }
 
         return Task.FromResult(linhasDeOnibus);
