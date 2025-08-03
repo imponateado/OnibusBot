@@ -17,36 +17,36 @@ public class ApiCall
         _callApi = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
     }
 
-    public async Task<ParadasDeOnibusResponse> GetParadasDeOnibus()
+    public async Task<ParadasDeOnibusResponseParadas> GetParadasDeOnibus()
     {
         var res = await _callApi.GetAsync(
             "https://geoserver.semob.df.gov.br/geoserver/semob/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=semob%3AParadas%20de%20onibus&outputFormat=application%2Fjson");
         res.EnsureSuccessStatusCode();
-        var paradasDeOnibus = await res.Content.ReadFromJsonAsync<ParadasDeOnibusResponse>();
+        var paradasDeOnibus = await res.Content.ReadFromJsonAsync<ParadasDeOnibusResponseParadas>();
         if (paradasDeOnibus == null)
             throw new Exception("Resposta vazia ou incompatível com tipo!");
 
         return paradasDeOnibus;
     }
 
-    public async Task<LinhasDeOnibusResponse> GetLinhasDeOnibus()
+    public async Task<LinhasDeOnibusResponseParadas> GetLinhasDeOnibus()
     {
         var res = await _callApi.GetAsync(
             "https://geoserver.semob.df.gov.br/geoserver/semob/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=semob%3ALinhas%20de%20onibus&outputFormat=application%2Fjson");
         res.EnsureSuccessStatusCode();
-        var linhasDeOnibus = await res.Content.ReadFromJsonAsync<LinhasDeOnibusResponse>();
+        var linhasDeOnibus = await res.Content.ReadFromJsonAsync<LinhasDeOnibusResponseParadas>();
         if (linhasDeOnibus == null)
             throw new Exception("Resposta vazia ou incompatível com tipo!");
 
         return linhasDeOnibus;
     }
 
-    public async Task<UltimaPosicaoFrotaResponse> GetUltimaPosicaoFrota()
+    public async Task<UltimaPosicaoFrotaResponseParadas> GetUltimaPosicaoFrota()
     {
         var res = await _callApi.GetAsync(
             "https://geoserver.semob.df.gov.br/geoserver/semob/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=semob%3A%C3%9Altima%20posi%C3%A7%C3%A3o%20da%20frota&outputFormat=application%2Fjson");
         res.EnsureSuccessStatusCode();
-        var ultimaPosicao = await res.Content.ReadFromJsonAsync<UltimaPosicaoFrotaResponse>();
+        var ultimaPosicao = await res.Content.ReadFromJsonAsync<UltimaPosicaoFrotaResponseParadas>();
         if (ultimaPosicao == null)
             throw new Exception("Resposta vazia ou incompatível com tipo!");
 
