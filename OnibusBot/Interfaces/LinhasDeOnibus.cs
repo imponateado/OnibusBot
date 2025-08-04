@@ -8,7 +8,7 @@ public class LinhasDeOnibus
     public string Type { get; set; }
     
     [JsonPropertyName("features")]
-    public IEnumerable<LinhasFeature> Features { get; set; }
+    public List<LinhasFeature> Features { get; set; }
     
     [JsonPropertyName("totalFeatures")]
     public int? TotalFeatures { get; set; }

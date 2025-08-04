@@ -8,7 +8,7 @@ public class ParadasDeOnibus
     public string Type { get; set; }
     
     [JsonPropertyName("features")]
-    public IEnumerable<ParadasFeature> Features { get; set; }
+    public List<ParadasFeature> Features { get; set; }
     
     [JsonPropertyName("totalFeatures")]
     public int? TotalFeatures { get; set; }

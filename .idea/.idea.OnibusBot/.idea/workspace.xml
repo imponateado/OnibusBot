@@ -9,26 +9,9 @@
   <component name="ChangeListManager">
     <list default="true" id="8daf6ff7-f211-4585-97e8-963633294a6a" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.OnibusBot/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.OnibusBot/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OnibusBot/Interfaces/Crs.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/OnibusBot/Interfaces/CrsProperties.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/OnibusBot/Interfaces/FeatureBase.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/OnibusBot/Interfaces/FrotaPorOperadoraProperties.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/OnibusBot/Interfaces/FrotaPorOperadoraResponse.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/OnibusBot/Interfaces/GeoJsonResponse.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/OnibusBot/Interfaces/Geometry.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/OnibusBot/Interfaces/HorariosDasLinhasProperties.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/OnibusBot/Interfaces/HorariosDasLinhasResponse.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/OnibusBot/Interfaces/LinhasDeOnibusProperties.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/OnibusBot/Interfaces/LinhasDeOnibusResponse.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/OnibusBot/Interfaces/ParadasDeOnibusProperties.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/OnibusBot/Interfaces/ParadasDeOnibusResponse.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/OnibusBot/Interfaces/UltimaPosicaoFrotaProperties.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/OnibusBot/Interfaces/UltimaPosicaoFrotaResponse.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/OnibusBot/Interfaces/ViagensProgramadasPorLinhaProperties.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/OnibusBot/Interfaces/ViagensProgramadasPorLinhaResponse.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/OnibusBot/Interfaces/LinhasDeOnibus.cs" beforeDir="false" afterPath="$PROJECT_DIR$/OnibusBot/Interfaces/LinhasDeOnibus.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/OnibusBot/Interfaces/ParadasDeOnibus.cs" beforeDir="false" afterPath="$PROJECT_DIR$/OnibusBot/Interfaces/ParadasDeOnibus.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/OnibusBot/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/OnibusBot/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OnibusBot/Service/APICall.cs" beforeDir="false" afterPath="$PROJECT_DIR$/OnibusBot/Service/APICall.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OnibusBot/Utils/ConvertStuff.cs" beforeDir="false" afterPath="$PROJECT_DIR$/OnibusBot/Utils/ConvertStuff.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/OnibusBot/obj/Debug/net9.0/OnibusBot.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/OnibusBot/obj/Debug/net9.0/OnibusBot.AssemblyInfo.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/OnibusBot/obj/Debug/net9.0/OnibusBot.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/OnibusBot/obj/Debug/net9.0/OnibusBot.AssemblyInfoInputs.cache" afterDir="false" />
     </list>
@@ -56,7 +39,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    ".NET Project.OnibusBot.executor": "Debug",
+    ".NET Project.OnibusBot.executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
@@ -103,7 +86,7 @@
       <option name="presentableId" value="Default" />
       <updated>1754168766583</updated>
       <workItem from="1754168773209" duration="108000" />
-      <workItem from="1754249182078" duration="7336000" />
+      <workItem from="1754249182078" duration="16249000" />
     </task>
     <servers />
   </component>
@@ -130,17 +113,17 @@
           <option name="timeStamp" value="3" />
         </breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/OnibusBot/Program.cs</url>
-          <line>16</line>
-          <properties documentPath="$PROJECT_DIR$/OnibusBot/Program.cs" containingFunctionPresentation="Method 'Main'">
+          <url>file://$PROJECT_DIR$/OnibusBot/Utils/ConvertStuff.cs</url>
+          <line>7</line>
+          <properties documentPath="$PROJECT_DIR$/OnibusBot/Utils/ConvertStuff.cs" containingFunctionPresentation="Method 'ConverterParadasCoords'">
             <startOffsets>
-              <option value="465" />
+              <option value="195" />
             </startOffsets>
             <endOffsets>
-              <option value="466" />
+              <option value="196" />
             </endOffsets>
           </properties>
-          <option name="timeStamp" value="4" />
+          <option name="timeStamp" value="10" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
