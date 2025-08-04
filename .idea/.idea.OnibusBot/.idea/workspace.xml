@@ -9,8 +9,6 @@
   <component name="ChangeListManager">
     <list default="true" id="8daf6ff7-f211-4585-97e8-963633294a6a" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.OnibusBot/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.OnibusBot/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OnibusBot/Interfaces/LinhasDeOnibus.cs" beforeDir="false" afterPath="$PROJECT_DIR$/OnibusBot/Interfaces/LinhasDeOnibus.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OnibusBot/Interfaces/ParadasDeOnibus.cs" beforeDir="false" afterPath="$PROJECT_DIR$/OnibusBot/Interfaces/ParadasDeOnibus.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/OnibusBot/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/OnibusBot/Program.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/OnibusBot/obj/Debug/net9.0/OnibusBot.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/OnibusBot/obj/Debug/net9.0/OnibusBot.AssemblyInfo.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/OnibusBot/obj/Debug/net9.0/OnibusBot.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/OnibusBot/obj/Debug/net9.0/OnibusBot.AssemblyInfoInputs.cache" afterDir="false" />
@@ -37,22 +35,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    ".NET Project.OnibusBot.executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "main",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.sourceCode.C#",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;.NET Project.OnibusBot.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.sourceCode.C#&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="OnibusBot" type="DotNetProject" factoryName=".NET Project">
       <option name="EXE_PATH" value="" />
@@ -86,7 +84,8 @@
       <option name="presentableId" value="Default" />
       <updated>1754168766583</updated>
       <workItem from="1754168773209" duration="108000" />
-      <workItem from="1754249182078" duration="16249000" />
+      <workItem from="1754249182078" duration="18861000" />
+      <workItem from="1754270717220" duration="2389000" />
     </task>
     <servers />
   </component>

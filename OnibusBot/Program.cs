@@ -27,6 +27,14 @@ namespace OnibusBot
                 //remove features não necessárias
                 paradasDeOnibus = cleanObjects.CleanParadasDeOnibusObject(paradasDeOnibus);
                 ultimaPosicaoFrota = cleanObjects.CleanUltimaPosicaoObject(ultimaPosicaoFrota);
+                
+                //encontra as 3 paradas mais próximas do usuário
+                //var res = manage.GetClosestBusStops(latlon, paradasDeOnibus);
+                var res = Manage.GetClosestBusStop(latlon, paradasDeOnibus);
+                foreach (var feature in res)
+                {
+                    Console.WriteLine($"Parada encontrada: {feature.Properties.Parada}");
+                }
 
             }
             catch (Exception ex)
