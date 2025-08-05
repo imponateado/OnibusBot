@@ -9,7 +9,9 @@
   <component name="ChangeListManager">
     <list default="true" id="8daf6ff7-f211-4585-97e8-963633294a6a" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.OnibusBot/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.OnibusBot/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/OnibusBot.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/OnibusBot.sln.DotSettings.user" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/OnibusBot/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/OnibusBot/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/OnibusBot/Utils/ConvertStuff.cs" beforeDir="false" afterPath="$PROJECT_DIR$/OnibusBot/Utils/ConvertStuff.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/OnibusBot/obj/Debug/net9.0/OnibusBot.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/OnibusBot/obj/Debug/net9.0/OnibusBot.AssemblyInfo.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/OnibusBot/obj/Debug/net9.0/OnibusBot.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/OnibusBot/obj/Debug/net9.0/OnibusBot.AssemblyInfoInputs.cache" afterDir="false" />
     </list>
@@ -25,6 +27,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/123c7b794d464feeb66bbf1682022f3878a00/54/4f235f3f/Enumerable.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/f2b36a6e29e942c69914b5400fbd94bb1a1e00/e9/697aec68/HttpClient.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="ProjectColorInfo">{
@@ -35,22 +38,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;.NET Project.OnibusBot.executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.sourceCode.C#&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    ".NET Project.OnibusBot.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.sourceCode.C#",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="OnibusBot" type="DotNetProject" factoryName=".NET Project">
       <option name="EXE_PATH" value="" />
@@ -85,7 +88,11 @@
       <updated>1754168766583</updated>
       <workItem from="1754168773209" duration="108000" />
       <workItem from="1754249182078" duration="18861000" />
-      <workItem from="1754270717220" duration="2389000" />
+      <workItem from="1754270717220" duration="2778000" />
+      <workItem from="1754344581728" duration="6883000" />
+      <workItem from="1754429806535" duration="483000" />
+      <workItem from="1754430862003" duration="639000" />
+      <workItem from="1754432129585" duration="1588000" />
     </task>
     <servers />
   </component>
@@ -112,17 +119,17 @@
           <option name="timeStamp" value="3" />
         </breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/OnibusBot/Utils/ConvertStuff.cs</url>
-          <line>7</line>
-          <properties documentPath="$PROJECT_DIR$/OnibusBot/Utils/ConvertStuff.cs" containingFunctionPresentation="Method 'ConverterParadasCoords'">
+          <url>file://$PROJECT_DIR$/OnibusBot/Program.cs</url>
+          <line>32</line>
+          <properties documentPath="$PROJECT_DIR$/OnibusBot/Program.cs" containingFunctionPresentation="Method 'Main'">
             <startOffsets>
-              <option value="195" />
+              <option value="1463" />
             </startOffsets>
             <endOffsets>
-              <option value="196" />
+              <option value="1523" />
             </endOffsets>
           </properties>
-          <option name="timeStamp" value="10" />
+          <option name="timeStamp" value="21" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

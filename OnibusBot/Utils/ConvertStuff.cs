@@ -20,7 +20,7 @@ public class ConvertStuff : CoordConverter
             var lat = coords[0];
             var lon = coords[1];
 
-            var resultCoords = new List<double>() { lon, lat };
+            var resultCoords = new List<double>() { lat, lon };
 
             feature.Geometry.Coordinates = resultCoords;
         }
