@@ -15,7 +15,7 @@ public class Manage
     }
 
     public static Dictionary<ParadasFeature, List<LinhasFeature>> GetLinesByBusStopCoord(
-        ParadasDeOnibus paradasDeOnibus, LinhasDeOnibus linhasDeOnibus)
+        ParadasDeOnibus paradasDeOnibus, LinhasDeOnibus linhasDeOnibus, double distanciaMaxima = 0.1)
     {
         var resultado = new Dictionary<ParadasFeature, List<LinhasFeature>>();
 
@@ -23,8 +23,12 @@ public class Manage
         {
             var linhasQuePassamNaParada = linhasDeOnibus.Features.Where(linha =>
                 linha.Geometry.Coordinates.Any(coordenadaLinha =>
-                    Math.Abs(coordenadaLinha[0] - parada.Geometry.Coordinates[0]) < 0.0001 &&
-                    Math.Abs(coordenadaLinha[1] - parada.Geometry.Coordinates[1]) < 0.0001
+                    HaversineCalculator.HaversiniAlgorithm(
+                        parada.Geometry.Coordinates[0],
+                        parada.Geometry.Coordinates[1],
+                        coordenadaLinha[0],
+                        coordenadaLinha[1]
+                    ) <= distanciaMaxima
                 )
             ).ToList();
 
