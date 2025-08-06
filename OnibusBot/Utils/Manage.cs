@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using OnibusBot.Interfaces;
 
 namespace OnibusBot.Utils;
@@ -14,16 +15,17 @@ public class Manage
         return res1;
     }
 
-    public static Dictionary<ParadasFeature, List<LinhasFeature>> GetLinesByBusStopCoord(
+    public static Dictionary<ParadasFeature, List<LinhasFeature>> GetLinesByBusStopCoordParallel(
         ParadasDeOnibus paradasDeOnibus, LinhasDeOnibus linhasDeOnibus, double distanciaMaxima = 0.1)
     {
-        var resultado = new Dictionary<ParadasFeature, List<LinhasFeature>>();
-
-        foreach (var parada in paradasDeOnibus.Features)
+        var resultado = new ConcurrentDictionary<ParadasFeature, List<LinhasFeature>>();
+    
+        Parallel.ForEach(paradasDeOnibus.Features, parada =>
         {
+            // EXATAMENTE o seu código original, só rodando em paralelo
             var linhasQuePassamNaParada = linhasDeOnibus.Features.Where(linha =>
                 linha.Geometry.Coordinates.Any(coordenadaLinha =>
-                    HaversineCalculator.HaversiniAlgorithm(
+                    HaversineCalculator.HaversiniAlgorithm(  // <-- SEU MÉTODO ORIGINAL
                         parada.Geometry.Coordinates[0],
                         parada.Geometry.Coordinates[1],
                         coordenadaLinha[0],
@@ -36,8 +38,8 @@ public class Manage
             {
                 resultado[parada] = linhasQuePassamNaParada;
             }
-        }
+        });
 
-        return resultado;
+        return new Dictionary<ParadasFeature, List<LinhasFeature>>(resultado);
     }
 }

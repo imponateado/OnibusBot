@@ -55,7 +55,7 @@ namespace OnibusBot
                 
                 Console.WriteLine($"Paradas de ônibus mais próximas encontradas");
                 
-                var linesByBusStopCoord = Manage.GetLinesByBusStopCoord(paradasDeOnibus, linhasDeOnibus);
+                var linesByBusStopCoord = Manage.GetLinesByBusStopCoordParallel(paradasDeOnibus, linhasDeOnibus);
                 
                 Console.WriteLine($"Linhas de ônibus para as paradas encontradas");
 
