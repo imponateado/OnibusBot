@@ -29,8 +29,22 @@ namespace OnibusBot
                 ultimaPosicaoFrota = cleanObjects.CleanUltimaPosicaoObject(ultimaPosicaoFrota);
                 
                 //encontra as 3 paradas mais próximas do usuário
-                var res = Manage.GetClosestBusStop(latlon, paradasDeOnibus);
-                
+                var closestBusStops = Manage.GetClosestBusStop(latlon, paradasDeOnibus);
+                var linesByBusStopCoord = Manage.GetLinesByBusStopCoord(paradasDeOnibus, linhasDeOnibus);
+
+                if (linesByBusStopCoord.Any())
+                {
+                    var primeiraParada = linesByBusStopCoord.First();
+                    var parada = primeiraParada.Key;
+                    var primeiraLinha = primeiraParada.Value.First();
+                    
+                    Console.WriteLine($"A primeira parada encontrada foi {parada.Properties.Descricao} e a primeira linha encontrada dessa parada foi {primeiraLinha.Properties.Nome}!");
+                }
+                else
+                {
+                    Console.WriteLine($"Nada foi encontrado!");
+                }
+
             }
             catch (Exception ex)
             {
