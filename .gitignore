@@ -1,4 +1,4 @@
 .env
-.idea
-OnibusBot/obj
-OnibusBot/bin
+.idea/
+OnibusBot/obj/
+OnibusBot/bin/
