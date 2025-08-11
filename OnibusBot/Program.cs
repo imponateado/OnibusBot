@@ -132,9 +132,6 @@ namespace OnibusBot
 
             foreach (var onibus in foundObjects.Take(10))
             {
-                var status = GetBusStatusMessage(onibus);
-                await bot.SendMessage(chatId, status);
-
                 await bot.SendLocation(chatId, latitude: (float)onibus.Geometry.Coordinates[1],
                     longitude: (float)onibus.Geometry.Coordinates[0]);
 
@@ -162,25 +159,6 @@ namespace OnibusBot
             await bot.SendMessage(chatId,
                 "Você será notificado a cada 2 minutos, deseja parar de receber notificações?",
                 replyMarkup: stopKeyboard);
-        }
-
-        private static string GetBusStatusMessage(UltimaFeature onibus)
-        {
-            var props = onibus.Properties;
-            var coords = onibus.Geometry.Coordinates;
-
-            var statusEmoji = "🟢";
-
-            var message = $"{statusEmoji} **Ônibus {props.Linha ?? "N/A"}**\n" +
-                          $"📍 Linha: {props.Linha}\n" +
-                          $"🧭 Sentido: {(props.Sentido == "0" ? "IDA" : "VOLTA")}\n";
-
-            if (coords != null)
-            {
-                message += $"🗺️ Localização: {coords[1]:F6}, {coords[0]:F6}\n";
-            }
-
-            return message;
         }
 
         private static async Task OnMessage(Message message, UpdateType type, TelegramBotClient bot,
