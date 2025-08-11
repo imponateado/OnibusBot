@@ -135,6 +135,9 @@ namespace OnibusBot
                 var status = GetBusStatusMessage(onibus);
                 await bot.SendMessage(chatId, status);
 
+                await bot.SendLocation(chatId, latitude: (float)onibus.Geometry.Coordinates[1],
+                    longitude: (float)onibus.Geometry.Coordinates[0]);
+
                 await Task.Delay(500);
             }
 
@@ -183,7 +186,7 @@ namespace OnibusBot
         private static async Task OnMessage(Message message, UpdateType type, TelegramBotClient bot,
             UltimaPosicao ultimaPosicaoFrota, List<string> linhasDisponiveis)
         {
-            if (message.Text == "/start")
+            if (message.Text == "/start" || message.Text == "oi" || message.Text == "Oi")
             {
                 await bot.SendMessage(message.Chat, "Qual linha você quer ser avisado?");
                 return;
