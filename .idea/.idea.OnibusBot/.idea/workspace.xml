@@ -9,13 +9,16 @@
   <component name="ChangeListManager">
     <list default="true" id="8daf6ff7-f211-4585-97e8-963633294a6a" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.OnibusBot/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.OnibusBot/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OnibusBot.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/OnibusBot.sln.DotSettings.user" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OnibusBot/Interfaces/UltimaPosicao.cs" beforeDir="false" afterPath="$PROJECT_DIR$/OnibusBot/Interfaces/UltimaPosicao.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/OnibusBot/OnibusBot.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/OnibusBot/OnibusBot.csproj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/OnibusBot/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/OnibusBot/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OnibusBot/Utils/CleanObjects.cs" beforeDir="false" afterPath="$PROJECT_DIR$/OnibusBot/Utils/CleanObjects.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OnibusBot/Utils/Manage.cs" beforeDir="false" afterPath="$PROJECT_DIR$/OnibusBot/Utils/Manage.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/OnibusBot/obj/Debug/net9.0/OnibusBot.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/OnibusBot/obj/Debug/net9.0/OnibusBot.AssemblyInfo.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/OnibusBot/obj/Debug/net9.0/OnibusBot.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/OnibusBot/obj/Debug/net9.0/OnibusBot.AssemblyInfoInputs.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/OnibusBot/obj/Debug/net9.0/OnibusBot.assets.cache" beforeDir="false" afterPath="$PROJECT_DIR$/OnibusBot/obj/Debug/net9.0/OnibusBot.assets.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/OnibusBot/obj/OnibusBot.csproj.nuget.dgspec.json" beforeDir="false" afterPath="$PROJECT_DIR$/OnibusBot/obj/OnibusBot.csproj.nuget.dgspec.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/OnibusBot/obj/OnibusBot.csproj.nuget.g.targets" beforeDir="false" afterPath="$PROJECT_DIR$/OnibusBot/obj/OnibusBot.csproj.nuget.g.targets" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/OnibusBot/obj/project.assets.json" beforeDir="false" afterPath="$PROJECT_DIR$/OnibusBot/obj/project.assets.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/OnibusBot/obj/project.nuget.cache" beforeDir="false" afterPath="$PROJECT_DIR$/OnibusBot/obj/project.nuget.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/OnibusBot/obj/project.packagespec.json" beforeDir="false" afterPath="$PROJECT_DIR$/OnibusBot/obj/project.packagespec.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/OnibusBot/obj/rider.project.restore.info" beforeDir="false" afterPath="$PROJECT_DIR$/OnibusBot/obj/rider.project.restore.info" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -104,7 +107,7 @@
       <workItem from="1754688235416" duration="12462000" />
       <workItem from="1754795312243" duration="10064000" />
       <workItem from="1754811269580" duration="7540000" />
-      <workItem from="1754867914262" duration="3778000" />
+      <workItem from="1754867914262" duration="11444000" />
     </task>
     <servers />
   </component>
@@ -120,18 +123,18 @@
       <expand>
         <path>
           <item name="rootNode" type="c53c71d1:RiderDotCoverCoverageTreeModel$RootNode" />
-          <item name="Total 0% 403/403" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="Total 0% 408/408" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
         </path>
         <path>
           <item name="rootNode" type="c53c71d1:RiderDotCoverCoverageTreeModel$RootNode" />
-          <item name="Total 0% 403/403" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-          <item name="OnibusBot 0% 403/403" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="Total 0% 408/408" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="OnibusBot 0% 408/408" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
         </path>
         <path>
           <item name="rootNode" type="c53c71d1:RiderDotCoverCoverageTreeModel$RootNode" />
-          <item name="Total 0% 403/403" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-          <item name="OnibusBot 0% 403/403" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-          <item name="OnibusBot 0% 403/403" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="Total 0% 408/408" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="OnibusBot 0% 408/408" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="OnibusBot 0% 408/408" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
         </path>
       </expand>
       <select />
@@ -156,19 +159,6 @@
           <properties exception="System.Threading.ThreadAbortException" breakIfHandledByOtherCode="false" displayValue="System.Threading.ThreadAbortException" />
           <option name="timeStamp" value="3" />
         </breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/OnibusBot/Program.cs</url>
-          <line>83</line>
-          <properties documentPath="$PROJECT_DIR$/OnibusBot/Program.cs" containingFunctionPresentation="Method 'Main'">
-            <startOffsets>
-              <option value="4123" />
-            </startOffsets>
-            <endOffsets>
-              <option value="4250" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="10" />
-        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
