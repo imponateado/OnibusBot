@@ -13,7 +13,8 @@ public class CleanObjects
     public UltimaPosicao CleanUltimaPosicaoObject(UltimaPosicao ultimaPosicao)
     {
         ultimaPosicao.Features.RemoveAll(feature => feature.Properties.Linha == "");
-        ultimaPosicao.Features.RemoveAll(feature => feature.Properties.Velocidade == "0");
+        //ultimaPosicao.Features.RemoveAll(feature => feature.Properties.Velocidade == "0");
+        //ultimaPosicao.Features.RemoveAll(feature => feature.Properties.Sentido == "");
         return ultimaPosicao;
     }
 }

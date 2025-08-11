@@ -8,7 +8,7 @@ public class UltimaPosicao
     public string Type { get; set; }
     
     [JsonPropertyName("features")]
-    public List<UtimaFeature> Features { get; set; }
+    public List<UltimaFeature> Features { get; set; }
     
     [JsonPropertyName("totalFeatures")]
     public int? TotalFeatures { get; set; }
@@ -23,10 +23,10 @@ public class UltimaPosicao
     public string?  TimeStamp { get; set; }
     
     [JsonPropertyName("crs")]
-    public UtimaCrs Crs { get; set; }
+    public UltimaCrs Crs { get; set; }
 }
 
-public class UtimaFeature
+public class UltimaFeature
 {
     [JsonPropertyName("type")]
     public string? Type { get; set; }
@@ -35,16 +35,16 @@ public class UtimaFeature
     public string? Id { get; set; }
     
     [JsonPropertyName("geometry")]
-    public UtimaFeatureGeometry Geometry { get; set; }
+    public UltimaFeatureGeometry Geometry { get; set; }
     
     [JsonPropertyName("geometry_name")]
     public string? GeometryName { get; set; }
     
     [JsonPropertyName("properties")]
-    public UtimaFeatureProperty Properties { get; set; }
+    public UltimaFeatureProperty Properties { get; set; }
 }
 
-public class UtimaFeatureProperty
+public class UltimaFeatureProperty
 {
     [JsonPropertyName("id_operadora")]
     public int?  IdOperadora { get; set; }
@@ -80,7 +80,7 @@ public class UtimaFeatureProperty
     public string? Sentido { get; set; }
 }
 
-public class UtimaFeatureGeometry
+public class UltimaFeatureGeometry
 {
     [JsonPropertyName("type")]
     public string? Type { get; set; }
@@ -89,16 +89,16 @@ public class UtimaFeatureGeometry
     public List<double> Coordinates { get; set; }
 }
 
-public class UtimaCrs
+public class UltimaCrs
 {
     [JsonPropertyName("type")]
     public string? Type { get; set; }
     
     [JsonPropertyName("properties")]
-    public UtimaCrsProperty Properties { get; set; }
+    public UltimaCrsProperty Properties { get; set; }
 }
 
-public class UtimaCrsProperty
+public class UltimaCrsProperty
 {
     [JsonPropertyName("name")]
     public string? Name { get; set; }

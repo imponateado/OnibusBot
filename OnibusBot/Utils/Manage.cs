@@ -1,45 +1,43 @@
 using System.Collections.Concurrent;
+using System.IO.Enumeration;
 using OnibusBot.Interfaces;
 
 namespace OnibusBot.Utils;
 
-public class Manage
+public static class Manage
 {
-    public static List<ParadasFeature> GetClosestBusStop(List<double> latlon, ParadasDeOnibus paradasDeOnibus)
+    public static List<LinhasFeature> GetLinhas(LinhasDeOnibus linhasDeOnibus, string linha)
     {
-        var res = paradasDeOnibus.Features.OrderBy(feature =>
-                HaversineCalculator.HaversiniAlgorithm(latlon[0], latlon[1], feature.Geometry.Coordinates[0],
-                    feature.Geometry.Coordinates[1]))
-            .ToList();
-        var res1 = res.Take(3).ToList();
-        return res1;
+        var res = linhasDeOnibus.Features.Where(x => x.Properties.Linha == linha).ToList();
+
+        if (!res.Any())
+            throw new Exception("Nenhuma linha com esse número foi encontrado.");
+        
+        return res;
     }
 
-    public static Dictionary<ParadasFeature, List<LinhasFeature>> GetLinesByBusStopCoordParallel(
-        ParadasDeOnibus paradasDeOnibus, LinhasDeOnibus linhasDeOnibus, double distanciaMaxima = 0.1)
+    public static bool LineExistsAtLastPosition(UltimaPosicao ultimaPosicao, string linha)
     {
-        var resultado = new ConcurrentDictionary<ParadasFeature, List<LinhasFeature>>();
+        var res = ultimaPosicao.Features.Any(x => x.Properties.Linha == linha);
+        return res;
+    }
+
+    public static List<List<double>> GetClosestPoint(List<List<double>> coords, List<double> pointLatLon)
+    {
+        var res = coords.OrderBy(coord =>
+            HaversineCalculator.HaversiniAlgorithm(pointLatLon[0], pointLatLon[1], coord[0], coord[1])).ToList();
+        return res;
+    }
+    public static List<UltimaFeature> GetLinha(UltimaPosicao ultimaPosicao, string sentido, string linha)
+    {
+        if (ultimaPosicao?.Features == null)
+            return new List<UltimaFeature>();
     
-        Parallel.ForEach(paradasDeOnibus.Features, parada =>
-        {
-            // EXATAMENTE o seu código original, só rodando em paralelo
-            var linhasQuePassamNaParada = linhasDeOnibus.Features.Where(linha =>
-                linha.Geometry.Coordinates.Any(coordenadaLinha =>
-                    HaversineCalculator.HaversiniAlgorithm(  // <-- SEU MÉTODO ORIGINAL
-                        parada.Geometry.Coordinates[0],
-                        parada.Geometry.Coordinates[1],
-                        coordenadaLinha[0],
-                        coordenadaLinha[1]
-                    ) <= distanciaMaxima
-                )
-            ).ToList();
-
-            if (linhasQuePassamNaParada.Any())
-            {
-                resultado[parada] = linhasQuePassamNaParada;
-            }
-        });
-
-        return new Dictionary<ParadasFeature, List<LinhasFeature>>(resultado);
+        var res = ultimaPosicao.Features
+            .Where(x => string.Equals(x.Properties.Linha, linha, StringComparison.OrdinalIgnoreCase) && 
+                        string.Equals(x.Properties.Sentido, sentido, StringComparison.OrdinalIgnoreCase))
+            .ToList();
+    
+        return res;
     }
 }
