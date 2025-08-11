@@ -31,8 +31,9 @@ namespace OnibusBot
             var cleanObjects = new CleanObjects();
             //var latlon = new List<double> { -15.888812, -48.019994 };
 
+            var linhasDeOnibus = await apiCall.GetLinhasDeOnibus();
             var ultimaPosicaoFrota = await LoadInitialData(apiCall, cleanObjects);
-            var linhasDisponiveis = await AvailableLines(ultimaPosicaoFrota);
+            var linhasDisponiveis = await AvailableLines(linhasDeOnibus);
 
             // Salvar referências globais
             globalBot = bot;
@@ -50,6 +51,7 @@ namespace OnibusBot
                 await OnMessage(msg, type, bot, ultimaPosicaoFrota, linhasDisponiveis);
             bot.OnUpdate += async (update) => await OnUpdate(bot, update, ultimaPosicaoFrota);
 
+            Console.WriteLine($"Hit whatever key to shut bot down.");
             Console.ReadKey();
 
             try
@@ -103,6 +105,13 @@ namespace OnibusBot
                     await ProcessAndSendBusStatus(bot, chatId, linha, sentido, ultimaPosicao);
                 }
             }
+
+            // Se é comando para parar notificações
+            else if (callbackData.StartsWith("stop_"))
+            {
+                var removidos = userSubscriptions.RemoveAll(x => x.ChatId == chatId);
+                await bot.SendMessage(chatId, "✅ Notificações canceladas!");
+            }
         }
 
         private static async Task ProcessAndSendBusStatus(TelegramBotClient bot, long chatId,
@@ -121,13 +130,11 @@ namespace OnibusBot
             await bot.SendMessage(chatId,
                 $"🚌 Encontrados {foundObjects.Count} ônibus da linha {linha} no sentido {sentidoTexto}:");
 
-            // Enviar informações de cada ônibus
-            foreach (var onibus in foundObjects.Take(10)) // Limitar a 10 para não spammar muito
+            foreach (var onibus in foundObjects.Take(10))
             {
                 var status = GetBusStatusMessage(onibus);
                 await bot.SendMessage(chatId, status);
 
-                // Pequeno delay para não sobrecarregar
                 await Task.Delay(500);
             }
 
@@ -137,7 +144,6 @@ namespace OnibusBot
                     $"... e mais {foundObjects.Count - 10} ônibus circulando nesta linha!");
             }
 
-            // Adicione essa linha no final do método ProcessAndSendBusStatus:
             userSubscriptions.Add(new UserSubscription
             {
                 ChatId = chatId,
@@ -145,7 +151,14 @@ namespace OnibusBot
                 Sentido = sentido
             });
 
-            await bot.SendMessage(chatId, "✅ Você será notificado a cada 2 minutos sobre esta linha!");
+            var stopKeyboard = new InlineKeyboardMarkup(new[]
+            {
+                new[] { InlineKeyboardButton.WithCallbackData("❌ Parar notificações", $"stop_{chatId}") }
+            });
+
+            await bot.SendMessage(chatId,
+                "Você será notificado a cada 2 minutos, deseja parar de receber notificações?",
+                replyMarkup: stopKeyboard);
         }
 
         private static string GetBusStatusMessage(UltimaFeature onibus)
@@ -153,13 +166,12 @@ namespace OnibusBot
             var props = onibus.Properties;
             var coords = onibus.Geometry.Coordinates;
 
-            var statusEmoji = "🟢"; // Assumindo que está funcionando se está na lista
+            var statusEmoji = "🟢";
 
             var message = $"{statusEmoji} **Ônibus {props.Linha ?? "N/A"}**\n" +
                           $"📍 Linha: {props.Linha}\n" +
                           $"🧭 Sentido: {(props.Sentido == "0" ? "IDA" : "VOLTA")}\n";
 
-            // Adicionar coordenadas se disponível
             if (coords != null)
             {
                 message += $"🗺️ Localização: {coords[1]:F6}, {coords[0]:F6}\n";
@@ -180,11 +192,19 @@ namespace OnibusBot
             if (double.TryParse(message.Text, out var linhaEnviadaPeloUsuario))
             {
                 var linhasEncontradas = await GetMatchingLines(linhaEnviadaPeloUsuario, linhasDisponiveis);
-                var kbd = new InlineKeyboardMarkup(
-                    linhasEncontradas.Select(linha => new[]
-                        { InlineKeyboardButton.WithCallbackData(linha, $"{linha}"), })
-                );
-                await bot.SendMessage(message.Chat, "Selecione a linha", replyMarkup: kbd);
+
+                if (linhasEncontradas.Count < 1)
+                {
+                    await bot.SendMessage(message.Chat, "Nenhuma linha encontrada.");
+                }
+                else
+                {
+                    var kbd = new InlineKeyboardMarkup(
+                        linhasEncontradas.Select(linha => new[]
+                            { InlineKeyboardButton.WithCallbackData(linha, $"{linha}"), })
+                    );
+                    await bot.SendMessage(message.Chat, "Selecione a linha", replyMarkup: kbd);
+                }
             }
         }
 
@@ -227,10 +247,6 @@ namespace OnibusBot
 
         private static async Task ProcessComentedCode(ApiCall apiCall)
         {
-            //var linhasDeOnibus = await apiCall.GetLinhasDeOnibus();
-
-            //Console.WriteLine($"Linhas de ônibus API");
-
             //var paradasDeOnibus = await apiCall.GetParadasDeOnibus();
 
             //Console.WriteLine($"Paradas de Ônibus API");
@@ -270,11 +286,11 @@ namespace OnibusBot
             } */
         }
 
-        private static async Task<List<string>> AvailableLines(UltimaPosicao ultimaPosicao)
+        private static async Task<List<string>> AvailableLines(LinhasDeOnibus linhasDeOnibus)
         {
             var res = new List<string>();
 
-            foreach (var element in ultimaPosicao.Features)
+            foreach (var element in linhasDeOnibus.Features)
             {
                 res.Add(element.Properties.Linha);
             }
@@ -284,12 +300,10 @@ namespace OnibusBot
 
         private static string GetBotToken()
         {
-            // Estratégia 1: Variável de ambiente
             var tokenFromEnv = Environment.GetEnvironmentVariable("BOT_TOKEN");
             if (!string.IsNullOrEmpty(tokenFromEnv))
                 return tokenFromEnv;
 
-            // Estratégia 2: Arquivo .env em vários locais
             var searchPaths = new[]
             {
                 ".env", // Diretório atual
