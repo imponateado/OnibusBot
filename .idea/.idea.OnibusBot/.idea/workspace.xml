@@ -9,17 +9,9 @@
   <component name="ChangeListManager">
     <list default="true" id="8daf6ff7-f211-4585-97e8-963633294a6a" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.OnibusBot/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.OnibusBot/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OnibusBot/OnibusBot.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/OnibusBot/OnibusBot.csproj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/OnibusBot/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/OnibusBot/Program.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/OnibusBot/obj/Debug/net9.0/OnibusBot.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/OnibusBot/obj/Debug/net9.0/OnibusBot.AssemblyInfo.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/OnibusBot/obj/Debug/net9.0/OnibusBot.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/OnibusBot/obj/Debug/net9.0/OnibusBot.AssemblyInfoInputs.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OnibusBot/obj/Debug/net9.0/OnibusBot.assets.cache" beforeDir="false" afterPath="$PROJECT_DIR$/OnibusBot/obj/Debug/net9.0/OnibusBot.assets.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OnibusBot/obj/OnibusBot.csproj.nuget.dgspec.json" beforeDir="false" afterPath="$PROJECT_DIR$/OnibusBot/obj/OnibusBot.csproj.nuget.dgspec.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OnibusBot/obj/OnibusBot.csproj.nuget.g.targets" beforeDir="false" afterPath="$PROJECT_DIR$/OnibusBot/obj/OnibusBot.csproj.nuget.g.targets" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OnibusBot/obj/project.assets.json" beforeDir="false" afterPath="$PROJECT_DIR$/OnibusBot/obj/project.assets.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OnibusBot/obj/project.nuget.cache" beforeDir="false" afterPath="$PROJECT_DIR$/OnibusBot/obj/project.nuget.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OnibusBot/obj/project.packagespec.json" beforeDir="false" afterPath="$PROJECT_DIR$/OnibusBot/obj/project.packagespec.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OnibusBot/obj/rider.project.restore.info" beforeDir="false" afterPath="$PROJECT_DIR$/OnibusBot/obj/rider.project.restore.info" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,12 +25,12 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/123c7b794d464feeb66bbf1682022f3878a00/54/4f235f3f/Enumerable.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/6e7ee1cc1eda4856b69fee3902587d1ad19e00/b5/e8af0b55/File.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/7e38b033b52d4b9cb76b116a08b8e3a01a600/ce/ab16859a/Parallel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/c816325316254e04bdf8b565270e48752e000/64/0bc7b832/ConcurrentDictionary`2.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/f2b36a6e29e942c69914b5400fbd94bb1a1e00/e9/697aec68/HttpClient.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/51e673693d1192bcdf2c79cdeb5f8a112d0b598613e079d327f2af9d9412/TelegramBotClientOptions.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 1
@@ -64,7 +56,7 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RunManager" selected=".NET Project.OnibusBot">
+  <component name="RunManager">
     <configuration name="OnibusBot" type="DotNetProject" factoryName=".NET Project">
       <option name="EXE_PATH" value="" />
       <option name="PROGRAM_PARAMETERS" value="" />
@@ -107,7 +99,8 @@
       <workItem from="1754688235416" duration="12462000" />
       <workItem from="1754795312243" duration="10064000" />
       <workItem from="1754811269580" duration="7540000" />
-      <workItem from="1754867914262" duration="11444000" />
+      <workItem from="1754867914262" duration="12663000" />
+      <workItem from="1754933889084" duration="2773000" />
     </task>
     <servers />
   </component>
@@ -123,18 +116,18 @@
       <expand>
         <path>
           <item name="rootNode" type="c53c71d1:RiderDotCoverCoverageTreeModel$RootNode" />
-          <item name="Total 0% 408/408" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="Total 0% 492/492" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
         </path>
         <path>
           <item name="rootNode" type="c53c71d1:RiderDotCoverCoverageTreeModel$RootNode" />
-          <item name="Total 0% 408/408" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-          <item name="OnibusBot 0% 408/408" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="Total 0% 492/492" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="OnibusBot 0% 492/492" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
         </path>
         <path>
           <item name="rootNode" type="c53c71d1:RiderDotCoverCoverageTreeModel$RootNode" />
-          <item name="Total 0% 408/408" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-          <item name="OnibusBot 0% 408/408" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-          <item name="OnibusBot 0% 408/408" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="Total 0% 492/492" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="OnibusBot 0% 492/492" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="OnibusBot 0% 492/492" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
         </path>
       </expand>
       <select />
@@ -159,6 +152,45 @@
           <properties exception="System.Threading.ThreadAbortException" breakIfHandledByOtherCode="false" displayValue="System.Threading.ThreadAbortException" />
           <option name="timeStamp" value="3" />
         </breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/OnibusBot/Program.cs</url>
+          <line>18</line>
+          <properties documentPath="$PROJECT_DIR$/OnibusBot/Program.cs" containingFunctionPresentation="Method 'Main'">
+            <startOffsets>
+              <option value="450" />
+            </startOffsets>
+            <endOffsets>
+              <option value="479" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/OnibusBot/Service/APICall.cs</url>
+          <line>47</line>
+          <properties documentPath="$PROJECT_DIR$/OnibusBot/Service/APICall.cs" containingFunctionPresentation="Method 'GetUltimaPosicaoFrota'">
+            <startOffsets>
+              <option value="1873" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1903" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/OnibusBot/Program.cs</url>
+          <line>253</line>
+          <properties documentPath="$PROJECT_DIR$/OnibusBot/Program.cs" containingFunctionPresentation="Method 'AvailableLines'">
+            <startOffsets>
+              <option value="10113" />
+            </startOffsets>
+            <endOffsets>
+              <option value="10124" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>

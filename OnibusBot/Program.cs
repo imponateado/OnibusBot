@@ -13,11 +13,17 @@ namespace OnibusBot
 {
     class Program
     {
+        private static List<UserSubscription> userSubscriptions = new List<UserSubscription>();
+        private static System.Threading.Timer notificationTimer;
+        private static TelegramBotClient globalBot;
+        private static UltimaPosicao globalUltimaPosicao;
+
         static async Task Main(string[] args)
         {
             using var cts = new CancellationTokenSource();
             var botToken = GetBotToken();
             var bot = new TelegramBotClient(botToken, cancellationToken: cts.Token);
+
             var httpClient = new HttpClient();
             var httpHandle = new HttpClientHandler();
             var apiCall = new ApiCall(httpClient, httpHandle);
@@ -28,8 +34,23 @@ namespace OnibusBot
             var ultimaPosicaoFrota = await LoadInitialData(apiCall, cleanObjects);
             var linhasDisponiveis = await AvailableLines(ultimaPosicaoFrota);
 
-            bot.OnMessage += async (msg, type) => await OnMessage(msg, type, bot, ultimaPosicaoFrota, linhasDisponiveis);
+            // Salvar referências globais
+            globalBot = bot;
+            globalUltimaPosicao = ultimaPosicaoFrota;
+
+            // Configurar timer para notificações a cada 2 minutos
+            notificationTimer = new System.Threading.Timer(
+                callback: async _ => await EnviarNotificacoesPeriodicas(),
+                state: null,
+                dueTime: TimeSpan.FromMinutes(2),
+                period: TimeSpan.FromMinutes(2)
+            );
+
+            bot.OnMessage += async (msg, type) =>
+                await OnMessage(msg, type, bot, ultimaPosicaoFrota, linhasDisponiveis);
             bot.OnUpdate += async (update) => await OnUpdate(bot, update, ultimaPosicaoFrota);
+
+            Console.ReadKey();
 
             try
             {
@@ -43,13 +64,19 @@ namespace OnibusBot
 
         private static async Task OnUpdate(TelegramBotClient bot, Update update, UltimaPosicao ultimaPosicao)
         {
-            if (update.CallbackQuery != null)
+            if (update.CallbackQuery == null) return;
+
+            var callbackData = update.CallbackQuery.Data;
+            var chatId = update.CallbackQuery.Message.Chat.Id;
+
+            // Responder o callback primeiro
+            await bot.AnswerCallbackQuery(update.CallbackQuery.Id);
+
+            // Se é uma seleção de linha (não começa com "sentido_")
+            if (!callbackData.StartsWith("sentido_"))
             {
-                var linhaSelecionada = update.CallbackQuery.Data;
-        
-                // Responder o callback primeiro
-                await bot.AnswerCallbackQuery(update.CallbackQuery.Id);
-        
+                var linhaSelecionada = callbackData;
+
                 // Criar botões para IDA/VOLTA
                 var sentidoKeyboard = new InlineKeyboardMarkup(new[]
                 {
@@ -59,22 +86,86 @@ namespace OnibusBot
                         InlineKeyboardButton.WithCallbackData("VOLTA", $"sentido_{linhaSelecionada}_1")
                     }
                 });
-        
-                await bot.SendMessage(update.CallbackQuery.Message.Chat, 
-                    $"Linha {linhaSelecionada} selecionada! Escolha o sentido:", 
+
+                await bot.SendMessage(chatId,
+                    $"Linha {linhaSelecionada} selecionada! Escolha o sentido:",
                     replyMarkup: sentidoKeyboard);
             }
-    
-            // Tratar quando o usuário escolher o sentido
-            if (update.CallbackQuery?.Data?.StartsWith("sentido_") == true)
+            // Se é uma seleção de sentido
+            else if (callbackData.StartsWith("sentido_"))
             {
-                var parts = update.CallbackQuery.Data.Split('_');
-                var linha = parts[1];
-                var sentido = parts[2];
-        
-                // Agora você tem linha E sentido!
-                var foundObjects = ProcessLineSelection(bot, update.CallbackQuery.Message, linha, sentido, ultimaPosicao);
+                var parts = callbackData.Split('_');
+                if (parts.Length >= 3)
+                {
+                    var linha = parts[1];
+                    var sentido = parts[2];
+
+                    await ProcessAndSendBusStatus(bot, chatId, linha, sentido, ultimaPosicao);
+                }
             }
+        }
+
+        private static async Task ProcessAndSendBusStatus(TelegramBotClient bot, long chatId,
+            string linha, string sentido, UltimaPosicao ultimaPosicao)
+        {
+            var foundObjects = await ProcessLineSelection(bot, null, linha, sentido, ultimaPosicao);
+
+            if (!foundObjects.Any())
+            {
+                await bot.SendMessage(chatId,
+                    $"❌ Nenhum ônibus encontrado para a linha {linha} no sentido {(sentido == "0" ? "IDA" : "VOLTA")}");
+                return;
+            }
+
+            var sentidoTexto = sentido == "0" ? "IDA" : "VOLTA";
+            await bot.SendMessage(chatId,
+                $"🚌 Encontrados {foundObjects.Count} ônibus da linha {linha} no sentido {sentidoTexto}:");
+
+            // Enviar informações de cada ônibus
+            foreach (var onibus in foundObjects.Take(10)) // Limitar a 10 para não spammar muito
+            {
+                var status = GetBusStatusMessage(onibus);
+                await bot.SendMessage(chatId, status);
+
+                // Pequeno delay para não sobrecarregar
+                await Task.Delay(500);
+            }
+
+            if (foundObjects.Count > 10)
+            {
+                await bot.SendMessage(chatId,
+                    $"... e mais {foundObjects.Count - 10} ônibus circulando nesta linha!");
+            }
+
+            // Adicione essa linha no final do método ProcessAndSendBusStatus:
+            userSubscriptions.Add(new UserSubscription
+            {
+                ChatId = chatId,
+                Linha = linha,
+                Sentido = sentido
+            });
+
+            await bot.SendMessage(chatId, "✅ Você será notificado a cada 2 minutos sobre esta linha!");
+        }
+
+        private static string GetBusStatusMessage(UltimaFeature onibus)
+        {
+            var props = onibus.Properties;
+            var coords = onibus.Geometry.Coordinates;
+
+            var statusEmoji = "🟢"; // Assumindo que está funcionando se está na lista
+
+            var message = $"{statusEmoji} **Ônibus {props.Linha ?? "N/A"}**\n" +
+                          $"📍 Linha: {props.Linha}\n" +
+                          $"🧭 Sentido: {(props.Sentido == "0" ? "IDA" : "VOLTA")}\n";
+
+            // Adicionar coordenadas se disponível
+            if (coords != null)
+            {
+                message += $"🗺️ Localização: {coords[1]:F6}, {coords[0]:F6}\n";
+            }
+
+            return message;
         }
 
         private static async Task OnMessage(Message message, UpdateType type, TelegramBotClient bot,
@@ -86,7 +177,7 @@ namespace OnibusBot
                 return;
             }
 
-            if (double.TryParse(message.Text, out var linhaEnviadaPeloUsuario)
+            if (double.TryParse(message.Text, out var linhaEnviadaPeloUsuario))
             {
                 var linhasEncontradas = await GetMatchingLines(linhaEnviadaPeloUsuario, linhasDisponiveis);
                 var kbd = new InlineKeyboardMarkup(
@@ -193,14 +284,65 @@ namespace OnibusBot
 
         private static string GetBotToken()
         {
-            if (File.Exists(".env"))
+            // Estratégia 1: Variável de ambiente
+            var tokenFromEnv = Environment.GetEnvironmentVariable("BOT_TOKEN");
+            if (!string.IsNullOrEmpty(tokenFromEnv))
+                return tokenFromEnv;
+
+            // Estratégia 2: Arquivo .env em vários locais
+            var searchPaths = new[]
             {
-                var lines = File.ReadAllLines(".env");
-                var tokenLine = lines.FirstOrDefault(x => x.StartsWith("BOT_TOKEN="));
-                return tokenLine?.Replace("BOT_TOKEN", "").Trim() ?? "";
+                ".env", // Diretório atual
+                "../.env", // Um nível acima
+                "../../.env", // Dois níveis acima
+                "../../../.env", // Três níveis acima
+                "../../../../.env", // Quatro níveis acima
+                "../../../../../.env", // Cinco níveis acima (seu caso real)
+                "../../../../../../.env", // Seis níveis acima (por segurança)
+                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ".env") // Pasta do executável
+            };
+
+            foreach (var path in searchPaths)
+            {
+                try
+                {
+                    if (File.Exists(path))
+                    {
+                        var lines = File.ReadAllLines(path);
+                        var tokenLine = lines.FirstOrDefault(x => x.StartsWith("BOT_TOKEN="));
+                        var token = tokenLine?.Substring("BOT_TOKEN=".Length).Trim();
+
+                        if (!string.IsNullOrEmpty(token))
+                        {
+                            Console.WriteLine($"Token encontrado em: {Path.GetFullPath(path)}");
+                            return token;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Erro ao ler {path}: {ex.Message}");
+                }
             }
 
+            Console.WriteLine("Token não encontrado em nenhum local");
             return "";
+        }
+
+        private static async Task EnviarNotificacoesPeriodicas()
+        {
+            foreach (var subscription in userSubscriptions.ToList())
+            {
+                try
+                {
+                    await ProcessAndSendBusStatus(globalBot, subscription.ChatId,
+                        subscription.Linha, subscription.Sentido, globalUltimaPosicao);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Erro ao enviar notificação para {subscription.ChatId}: {ex.Message}");
+                }
+            }
         }
     }
 }
