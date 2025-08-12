@@ -350,7 +350,6 @@ namespace OnibusBot
         {
             try
             {
-                Console.WriteLine("Atualizando dados da frota...");
                 var novosDados = await LoadInitialData(globalApiCall, globalCleanObjects);
                 globalUltimaPosicao = novosDados;
             }
