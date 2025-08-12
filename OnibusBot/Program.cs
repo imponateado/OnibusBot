@@ -146,15 +146,6 @@ namespace OnibusBot
 
             var foundObjects = await ProcessLineSelection(bot, null, linha, sentido, ultimaPosicao);
 
-            if (!foundObjects.Any())
-            {
-                await bot.SendMessage(chatId,
-                    $"❌ Nenhum ônibus encontrado para a linha {linha} no sentido {(sentido == "0" ? "IDA" : "VOLTA")}\n\n" +
-                    "Você será notificado a cada 2 minutos, deseja parar?",
-                    replyMarkup: stopKeyboard);
-                return;
-            }
-
             var sentidoTexto = sentido == "0" ? "IDA" : "VOLTA";
             await bot.SendMessage(chatId,
                 $"🚌 Encontrados {foundObjects.Count} ônibus da linha {linha} no sentido {sentidoTexto}:");
@@ -183,7 +174,7 @@ namespace OnibusBot
         {
             if (message.Text == "/start" || message.Text == "oi" || message.Text == "Oi")
             {
-                await bot.SendMessage(message.Chat, "Qual linha você quer ser avisado?");
+                await bot.SendMessage(message.Chat, "Olá!\n\nEste é um simples BOT para Telegram que envia as localizações das linhas em curso.\n\nComece enviando o número da linha que você quer acompanhar!");
                 return;
             }
 
@@ -203,6 +194,11 @@ namespace OnibusBot
                     );
                     await bot.SendMessage(message.Chat, "Selecione a linha", replyMarkup: kbd);
                 }
+            }
+
+            if (message.Text == "/info")
+            {
+                await bot.SendMessage(message.Chat, $"")
             }
         }
 
