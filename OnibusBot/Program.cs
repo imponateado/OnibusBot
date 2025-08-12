@@ -286,14 +286,7 @@ namespace OnibusBot
 
         private static async Task<List<string>> AvailableLines(LinhasDeOnibus linhasDeOnibus)
         {
-            var res = new List<string>();
-
-            foreach (var element in linhasDeOnibus.Features)
-            {
-                res.Add(element.Properties.Linha);
-            }
-
-            return res;
+            return linhasDeOnibus.Features.Select(x => x.Properties.Linha).Distinct().ToList();
         }
 
         private static string GetBotToken()
@@ -364,7 +357,6 @@ namespace OnibusBot
                 Console.WriteLine("Atualizando dados da frota...");
                 var novosDados = await LoadInitialData(globalApiCall, globalCleanObjects);
                 globalUltimaPosicao = novosDados;
-                Console.WriteLine("Dados atualizados com sucesso!");
             }
             catch (Exception ex)
             {
