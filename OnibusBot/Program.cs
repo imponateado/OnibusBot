@@ -17,6 +17,9 @@ namespace OnibusBot
         private static System.Threading.Timer notificationTimer;
         private static TelegramBotClient globalBot;
         private static UltimaPosicao globalUltimaPosicao;
+        private static System.Threading.Timer dataUpdateTimer;
+        private static ApiCall globalApiCall;
+        private static CleanObjects globalCleanObjects;
 
         static async Task Main(string[] args)
         {
@@ -35,17 +38,28 @@ namespace OnibusBot
             var ultimaPosicaoFrota = await LoadInitialData(apiCall, cleanObjects);
             var linhasDisponiveis = await AvailableLines(linhasDeOnibus);
 
-            // Salvar referências globais
             globalBot = bot;
             globalUltimaPosicao = ultimaPosicaoFrota;
 
-            // Configurar timer para notificações a cada 2 minutos
             notificationTimer = new System.Threading.Timer(
                 callback: async _ => await EnviarNotificacoesPeriodicas(),
                 state: null,
                 dueTime: TimeSpan.FromMinutes(2),
                 period: TimeSpan.FromMinutes(2)
             );
+
+            globalBot = bot;
+            globalUltimaPosicao = ultimaPosicaoFrota;
+            globalApiCall = apiCall;
+            globalCleanObjects = cleanObjects;
+
+            dataUpdateTimer = new System.Threading.Timer(
+                callback: async _ => await AtualizarDadosFrota(),
+                state: null,
+                dueTime: TimeSpan.FromMinutes(1),
+                period: TimeSpan.FromMinutes(1)
+            );
+
 
             bot.OnMessage += async (msg, type) =>
                 await OnMessage(msg, type, bot, ultimaPosicaoFrota, linhasDisponiveis);
@@ -71,30 +85,16 @@ namespace OnibusBot
             var callbackData = update.CallbackQuery.Data;
             var chatId = update.CallbackQuery.Message.Chat.Id;
 
-            // Responder o callback primeiro
             await bot.AnswerCallbackQuery(update.CallbackQuery.Id);
 
-            // Se é uma seleção de linha (não começa com "sentido_")
-            if (!callbackData.StartsWith("sentido_"))
+            if (callbackData.StartsWith("stop_"))
             {
-                var linhaSelecionada = callbackData;
-
-                // Criar botões para IDA/VOLTA
-                var sentidoKeyboard = new InlineKeyboardMarkup(new[]
-                {
-                    new[]
-                    {
-                        InlineKeyboardButton.WithCallbackData("IDA", $"sentido_{linhaSelecionada}_0"),
-                        InlineKeyboardButton.WithCallbackData("VOLTA", $"sentido_{linhaSelecionada}_1")
-                    }
-                });
-
-                await bot.SendMessage(chatId,
-                    $"Linha {linhaSelecionada} selecionada! Escolha o sentido:",
-                    replyMarkup: sentidoKeyboard);
+                var removidos = userSubscriptions.RemoveAll(x => x.ChatId == chatId);
+                await bot.SendMessage(chatId, $"✅ Notificações canceladas!");
+                return;
             }
-            // Se é uma seleção de sentido
-            else if (callbackData.StartsWith("sentido_"))
+
+            if (callbackData.StartsWith("sentido_"))
             {
                 var parts = callbackData.Split('_');
                 if (parts.Length >= 3)
@@ -104,25 +104,54 @@ namespace OnibusBot
 
                     await ProcessAndSendBusStatus(bot, chatId, linha, sentido, ultimaPosicao);
                 }
+
+                return;
             }
 
-            // Se é comando para parar notificações
-            else if (callbackData.StartsWith("stop_"))
+            var linhaSelecionada = callbackData;
+
+            var sentidoKeyboard = new InlineKeyboardMarkup(new[]
             {
-                var removidos = userSubscriptions.RemoveAll(x => x.ChatId == chatId);
-                await bot.SendMessage(chatId, "✅ Notificações canceladas!");
-            }
+                new[]
+                {
+                    InlineKeyboardButton.WithCallbackData("IDA", $"sentido_{linhaSelecionada}_0"),
+                    InlineKeyboardButton.WithCallbackData("VOLTA", $"sentido_{linhaSelecionada}_1")
+                }
+            });
+
+            await bot.SendMessage(chatId,
+                $"Escolha o sentido:",
+                replyMarkup: sentidoKeyboard);
         }
 
         private static async Task ProcessAndSendBusStatus(TelegramBotClient bot, long chatId,
             string linha, string sentido, UltimaPosicao ultimaPosicao)
         {
+            var stopKeyboard = new InlineKeyboardMarkup(new[]
+            {
+                new[] { InlineKeyboardButton.WithCallbackData("❌ Parar notificações", $"stop_{chatId}") }
+            });
+
+            var jaExiste = userSubscriptions.Any(x => x.ChatId == chatId && x.Linha == linha && x.Sentido == sentido);
+
+            if (!jaExiste)
+            {
+                userSubscriptions.Add(new UserSubscription
+                {
+                    ChatId = chatId,
+                    Linha = linha,
+                    Sentido = sentido
+                });
+            }
+
             var foundObjects = await ProcessLineSelection(bot, null, linha, sentido, ultimaPosicao);
 
             if (!foundObjects.Any())
             {
                 await bot.SendMessage(chatId,
-                    $"❌ Nenhum ônibus encontrado para a linha {linha} no sentido {(sentido == "0" ? "IDA" : "VOLTA")}");
+                    $"❌ Nenhum ônibus encontrado para a linha {linha} no sentido {(sentido == "0" ? "IDA" : "VOLTA")}\n\n" +
+                    "Você será notificado a cada 2 minutos, deseja parar?",
+                    replyMarkup: stopKeyboard);
                 return;
             }
 
@@ -143,18 +172,6 @@ namespace OnibusBot
                 await bot.SendMessage(chatId,
                     $"... e mais {foundObjects.Count - 10} ônibus circulando nesta linha!");
             }
-
-            userSubscriptions.Add(new UserSubscription
-            {
-                ChatId = chatId,
-                Linha = linha,
-                Sentido = sentido
-            });
-
-            var stopKeyboard = new InlineKeyboardMarkup(new[]
-            {
-                new[] { InlineKeyboardButton.WithCallbackData("❌ Parar notificações", $"stop_{chatId}") }
-            });
 
             await bot.SendMessage(chatId,
                 "Você será notificado a cada 2 minutos, deseja parar de receber notificações?",
@@ -337,6 +354,21 @@ namespace OnibusBot
                 {
                     Console.WriteLine($"Erro ao enviar notificação para {subscription.ChatId}: {ex.Message}");
                 }
+            }
+        }
+
+        private static async Task AtualizarDadosFrota()
+        {
+            try
+            {
+                Console.WriteLine("Atualizando dados da frota...");
+                var novosDados = await LoadInitialData(globalApiCall, globalCleanObjects);
+                globalUltimaPosicao = novosDados;
+                Console.WriteLine("Dados atualizados com sucesso!");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao atualizar dados: {ex.Message}");
             }
         }
     }
