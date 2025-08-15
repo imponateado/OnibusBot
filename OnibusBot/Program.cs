@@ -18,10 +18,9 @@ namespace OnibusBot
     {
         static async Task Main(string[] args)
         {
-            // Configuração para funcionar como daemon e aplicação normal
             var host = Host.CreateDefaultBuilder(args)
-                .UseSystemd() // Habilita integração com systemd (Linux)
-                .UseWindowsService() // Habilita integração com Windows Services
+                .UseSystemd()
+                .UseWindowsService()
                 .ConfigureServices((context, services) =>
                 {
                     services.AddHostedService<OnibusService>();
@@ -33,7 +32,6 @@ namespace OnibusBot
                     logging.ClearProviders();
                     logging.AddConsole();
                     
-                    // Logs específicos por plataforma
                     if (OperatingSystem.IsLinux())
                     {
                         logging.AddSystemdConsole();
@@ -41,7 +39,7 @@ namespace OnibusBot
                     
                     if (OperatingSystem.IsWindows())
                     {
-                        logging.AddEventLog(); // Event Viewer do Windows
+                        logging.AddEventLog();
                     }
                 })
                 .Build();
@@ -102,20 +100,11 @@ namespace OnibusBot
                 globalApiCall = apiCall;
                 globalCleanObjects = cleanObjects;
 
-                // Timer para notificações periódicas
                 notificationTimer = new System.Threading.Timer(
                     callback: async _ => await EnviarNotificacoesPeriodicas(),
                     state: null,
                     dueTime: TimeSpan.FromMinutes(2),
                     period: TimeSpan.FromMinutes(2)
-                );
-
-                // Timer para atualização de dados
-                dataUpdateTimer = new System.Threading.Timer(
-                    callback: async _ => await AtualizarDadosFrota(),
-                    state: null,
-                    dueTime: TimeSpan.FromMinutes(1),
-                    period: TimeSpan.FromMinutes(1)
                 );
 
                 bot.OnMessage += async (msg, type) =>
@@ -124,7 +113,6 @@ namespace OnibusBot
 
                 _logger.LogInformation("OnibusBot daemon iniciado com sucesso! Aguardando mensagens...");
 
-                // Mantém o serviço rodando até o cancelamento
                 while (!stoppingToken.IsCancellationRequested)
                 {
                     await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
@@ -137,7 +125,7 @@ namespace OnibusBot
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Erro crítico no OnibusBot daemon: {Message}", ex.Message);
-                throw; // Re-throw para que o systemd saiba que houve falha
+                throw;
             }
         }
 
@@ -150,6 +138,30 @@ namespace OnibusBot
             
             await base.StopAsync(cancellationToken);
             _logger.LogInformation("OnibusBot daemon parado com sucesso.");
+        }
+
+        private void IniciarTimerSeNecessario()
+        {
+            if (userSubscriptions.Count > 0 && dataUpdateTimer == null)
+            {
+                _logger.LogInformation("Iniciando timer de atualização - primeira subscription ativa");
+                dataUpdateTimer = new System.Threading.Timer(
+                    callback: async _ => await AtualizarDadosFrota(),
+                    state: null,
+                    dueTime: TimeSpan.FromMinutes(1),
+                    period: TimeSpan.FromMinutes(1)
+                );
+            }
+        }
+
+        private void PararTimerSeNecessario()
+        {
+            if (userSubscriptions.Count == 0 && dataUpdateTimer != null)
+            {
+                _logger.LogInformation("Parando timer de atualização - nenhuma subscription ativa");
+                dataUpdateTimer?.Dispose();
+                dataUpdateTimer = null;
+            }
         }
 
         private async Task OnUpdate(TelegramBotClient bot, Update update, UltimaPosicao ultimaPosicao)
@@ -166,6 +178,10 @@ namespace OnibusBot
                 if (callbackData.StartsWith("stop_"))
                 {
                     var removidos = userSubscriptions.RemoveAll(x => x.ChatId == chatId);
+                    
+                    // Para o timer se não há mais subscriptions
+                    PararTimerSeNecessario();
+                    
                     await bot.SendMessage(chatId, $"✅ Notificações canceladas!");
                     _logger.LogInformation("Notificações canceladas para chat {ChatId}, {Removidos} inscrições removidas", 
                         chatId, removidos);
@@ -228,6 +244,9 @@ namespace OnibusBot
                         Linha = linha,
                         Sentido = sentido
                     });
+                    
+                    IniciarTimerSeNecessario();
+                    
                     _logger.LogInformation("Nova inscrição: Chat {ChatId}, Linha {Linha}, Sentido {Sentido}", 
                         chatId, linha, sentido);
                 }
@@ -352,14 +371,14 @@ namespace OnibusBot
 
             var searchPaths = new[]
             {
-                ".env", // Diretório atual
-                "../.env", // Um nível acima
-                "../../.env", // Dois níveis acima
-                "../../../.env", // Três níveis acima
-                "../../../../.env", // Quatro níveis acima
-                "../../../../../.env", // Cinco níveis acima (seu caso real)
-                "../../../../../../.env", // Seis níveis acima (por segurança)
-                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ".env") // Pasta do executável
+                ".env",
+                "../.env",
+                "../../.env",
+                "../../../.env",
+                "../../../../.env",
+                "../../../../../.env",
+                "../../../../../../.env",
+                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ".env")
             };
 
             foreach (var path in searchPaths)
@@ -420,10 +439,16 @@ namespace OnibusBot
         {
             try
             {
+                if (userSubscriptions.Count == 0)
+                {
+                    _logger.LogDebug("Nenhuma subscription ativa - pulando atualização dos dados da frota");
+                    return;
+                }
+
                 var novosDados = await LoadInitialData(globalApiCall, globalCleanObjects);
                 globalUltimaPosicao = novosDados;
-                _logger.LogDebug("Dados da frota atualizados com sucesso - {Count} features carregadas", 
-                    novosDados?.Features?.Count ?? 0);
+                _logger.LogDebug("Dados da frota atualizados com sucesso - {Count} features carregadas para {Subscriptions} subscriptions", 
+                    novosDados?.Features?.Count ?? 0, userSubscriptions.Count);
             }
             catch (Exception ex)
             {
