@@ -239,7 +239,7 @@ namespace OnibusBot
             {
                 var stopKeyboard = new InlineKeyboardMarkup(new[]
                 {
-                    new[] { InlineKeyboardButton.WithCallbackData("❌ Clique neste botão quando quiser parar de ser notificado.", $"stop_{chatId}") }
+                    new[] { InlineKeyboardButton.WithCallbackData("❌", $"stop_{chatId}") }
                 });
 
                 var jaExiste = userSubscriptions.Any(x => x.ChatId == chatId && x.Linha == linha && x.Sentido == sentido);
@@ -264,7 +264,7 @@ namespace OnibusBot
                 if (foundObjects.Count == 0)
                 {
                     await bot.SendMessage(chatId,
-                        "As localizações dos ônibus serão enviadas quando algum ônibus em curso for encontrado.");
+                        "As localizações dos ônibus serão enviadas quando algum ônibus em curso for encontrado.\n\nClique no botão abaixo quando não quiser ser mais notificado:", replyMarkup: stopKeyboard);
                 }
                 else
                 {
@@ -298,7 +298,12 @@ namespace OnibusBot
 
             if (primeiraVez)
             {
-                await globalBot.SendMessage(chatId, "Você será notificado de 2 em 2 minutos.");
+                var cancelKeyboard = new InlineKeyboardMarkup(new[]
+                {
+                    new[] { InlineKeyboardButton.WithCallbackData("❌", $"stop_{chatId}") }
+                });
+                
+                await globalBot.SendMessage(chatId, "Você será notificado de 2 em 2 minutos.\n\nClique no botão abaixo quando não quiser ser mais notificado:", replyMarkup: cancelKeyboard);
 
                 var subscription =
                     userSubscriptions.FirstOrDefault(x =>
@@ -461,7 +466,7 @@ namespace OnibusBot
             {
                 var stopKeyboard = new InlineKeyboardMarkup(new[]
                 {
-                    new[] { InlineKeyboardButton.WithCallbackData("❌ Parar de ser notificado.", $"stop_"), }
+                    new[] { InlineKeyboardButton.WithCallbackData("❌", $"stop_"), }
                 });
 
                 foreach (var subscription in userSubscriptions.ToList())
