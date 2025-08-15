@@ -111,8 +111,8 @@ namespace OnibusBot
                 unsubscribeButtonTimer = new System.Threading.Timer(
                     callback: async _ => await EnviarBotaoDeDesinscrever(),
                     state: null,
-                    dueTime: TimeSpan.FromMinutes(5),
-                    period: TimeSpan.FromMinutes(5)
+                    dueTime: TimeSpan.FromMinutes(10),
+                    period: TimeSpan.FromMinutes(10)
                 );
 
                 bot.OnMessage += async (msg, type) =>
