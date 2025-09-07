@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Globalization;
+using System.Runtime.CompilerServices;
 using System.Text.Json;
 using Microsoft.VisualBasic;
 using OnibusBot.Interfaces;
@@ -94,7 +95,19 @@ namespace OnibusBot
 
                 _logger.LogInformation("Carregando dados iniciais...");
                 var linhasDeOnibus = await apiCall.GetLinhasDeOnibus();
-                var ultimaPosicaoFrota = await LoadInitialData(apiCall, cleanObjects);
+
+                UltimaPosicao ultimaPosicaoFrota = null;
+                try
+                {
+
+                    ultimaPosicaoFrota = await LoadInitialData(apiCall, cleanObjects);
+                    _logger.LogInformation("Dados carregados da API com sucesso.");
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"Erro ao carregar dados de última posição: {ex.Message}");
+                }
+                
                 var linhasDisponiveis = await AvailableLines(linhasDeOnibus);
 
                 globalBot = bot;
@@ -191,7 +204,7 @@ namespace OnibusBot
                     
                     PararTimerSeNecessario();
                     
-                    await bot.SendMessage(chatId, $"✅ Notificações canceladas!");
+                    await bot.SendMessage(chatId, $"✅ Todas as notificações foram canceladas!");
                     _logger.LogInformation("Notificações canceladas para chat {ChatId}, {Removidos} inscrições removidas", 
                         chatId, removidos);
                     return;
@@ -238,6 +251,12 @@ namespace OnibusBot
         {
             try
             {
+                
+                if (ultimaPosicao != null)
+                {
+                    await bot.SendMessage(chatId, "⚠️ Desculpe, o serviço está temporariamente indisponível.");
+                    return;
+                }
                 var stopKeyboard = new InlineKeyboardMarkup(new[]
                 {
                     new[] { InlineKeyboardButton.WithCallbackData("❌", $"stop_{chatId}") }
@@ -332,12 +351,22 @@ namespace OnibusBot
             {
                 if (message.Text == "/start" || message.Text == "oi" || message.Text == "Oi")
                 {
+                    if (ultimaPosicaoFrota != null)
+                    {
+                        await bot.SendMessage(message.Chat, "⚠️ Desculpe, o serviço está temporariamente indisponível.");
+                        return;
+                    }
                     await bot.SendMessage(message.Chat, "Olá!\nQual linha você quer acompanhar?\nexemplos: 175");
                     return;
                 }
 
                 if (double.TryParse(message.Text, out var linhaEnviadaPeloUsuario))
                 {
+                    if (ultimaPosicaoFrota != null)
+                    {
+                        await bot.SendMessage(message.Chat, "⚠️ Desculpe, o serviço está temporariamente indisponível.");
+                        return;
+                    }
                     var linhasEncontradas = await GetMatchingLines(linhaEnviadaPeloUsuario, linhasDisponiveis);
 
                     if (linhasEncontradas.Count < 1)
@@ -441,6 +470,11 @@ namespace OnibusBot
         {
             try
             {
+                if (globalUltimaPosicao == null)
+                {
+                    _logger.LogError("Pulando notificação, últimas posições não disponíveis.");
+                    return;
+                }
                 _logger.LogDebug("Iniciando envio de notificações periódicas para {Count} inscrições", 
                     userSubscriptions.Count);
 
