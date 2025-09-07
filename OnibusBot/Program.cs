@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Globalization;
+using System.Text.Json;
 using Microsoft.VisualBasic;
 using OnibusBot.Interfaces;
 using OnibusBot.Service;
@@ -259,6 +260,12 @@ namespace OnibusBot
                         chatId, linha, sentido);
                 }
 
+                if (jaExiste)
+                {
+                    bot.SendMessage(chatId, $"Já foi encontrado uma inscrição pra linha {linha}!");
+                    return;
+                }
+
                 var foundObjects = await ProcessLineSelection(bot, null, linha, sentido, ultimaPosicao);
 
                 if (foundObjects.Count == 0)
@@ -287,8 +294,11 @@ namespace OnibusBot
             {
                 await globalBot.SendLocation(chatId, latitude: (float)bus.Geometry.Coordinates[1],
                     longitude: (float)bus.Geometry.Coordinates[0]);
+                var addressInfo = await GetAddressInfo((float)bus.Geometry.Coordinates[1],
+                    (float)bus.Geometry.Coordinates[0]);
+                await globalBot.SendMessage(chatId, addressInfo);
 
-                await Task.Delay(500, serviceCancellationToken);
+                await Task.Delay(1000, serviceCancellationToken);
             }
 
             if (onibus.Count > 10)
@@ -535,6 +545,45 @@ namespace OnibusBot
             {
                 Console.WriteLine($"{posicaoNasCoordenadasDaLinhaMaisProximaDoUsuario[i][1].ToString(CultureInfo.InvariantCulture)},{posicaoNasCoordenadasDaLinhaMaisProximaDoUsuario[i][0].ToString(CultureInfo.InvariantCulture)},Ponto {i}");
             } */
+        }
+
+        private async Task<string> GetAddressInfo(double latitude, double longitude)
+        {
+            try
+            {
+                var httpClient = _httpClientFactory.CreateClient();
+                var url =
+                    $"https://nominatim.openstreetmap.org/reverse?lat={latitude.ToString(CultureInfo.InvariantCulture)}&lon={longitude.ToString(CultureInfo.InvariantCulture)}";
+                var response = await httpClient.GetAsync(url);
+                if (response.IsSuccessStatusCode)
+                {
+                    var jsonContent = await response.Content.ReadAsStringAsync();
+                    var nominatinRes = JsonSerializer.Deserialize<NominatimResponse>(jsonContent);
+
+                    if (nominatinRes?.Address != null)
+                    {
+                        var parts = new List<string>();
+
+                        if (!string.IsNullOrWhiteSpace(nominatinRes?.Address.Road))
+                            parts.Add(nominatinRes?.Address.Road);
+
+                        if (!string.IsNullOrWhiteSpace(nominatinRes?.Address.Neighbourhood))
+                            parts.Add(nominatinRes?.Address.Neighbourhood);
+
+                        if (!string.IsNullOrWhiteSpace(nominatinRes?.Address.Suburb))
+                            parts.Add(nominatinRes?.Address.Suburb);
+
+                        return parts.Count > 0 ? string.Join(" ", parts) : "Endereço não disponível";
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning($"Erro ao buscar endereço: {ex.Message}");
+            }
+
+            return "Endereço não disponível.";
         }
     }
 }
