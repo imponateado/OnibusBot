@@ -22,7 +22,7 @@ OnibusBot is a Telegram bot designed to help users track public bus positions in
 
 ### Prerequisites
 
-- .NET 6.0 or later
+- .NET 9.0 or later
 - Telegram Bot Token (obtained from [@BotFather](https://t.me/botfather))
 
 ### Installation
@@ -144,7 +144,7 @@ OnibusBot é um bot do Telegram projetado para ajudar usuários a acompanhar pos
 
 ### Pré-requisitos
 
-- .NET 6.0 ou superior
+- .NET 9.0 ou superior
 - Token do Bot do Telegram (obtido do [@BotFather](https://t.me/botfather))
 
 ### Instalação
