@@ -9,10 +9,6 @@
   <component name="ChangeListManager">
     <list default="true" id="8daf6ff7-f211-4585-97e8-963633294a6a" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.OnibusBot/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.OnibusBot/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OnibusBot/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/OnibusBot/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OnibusBot/obj/Debug/net9.0/OnibusBot.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/OnibusBot/obj/Debug/net9.0/OnibusBot.AssemblyInfo.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OnibusBot/obj/Debug/net9.0/OnibusBot.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/OnibusBot/obj/Debug/net9.0/OnibusBot.AssemblyInfoInputs.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OnibusBot/obj/rider.project.restore.info" beforeDir="false" afterPath="$PROJECT_DIR$/OnibusBot/obj/rider.project.restore.info" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,10 +21,20 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {}
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/imponateado/OnibusBot",
+    "accountId": "31a41977-db79-4142-ae22-95e1ada6f2a8"
+  }
+}]]></component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/OnibusBot/Interfaces/NominatimResponse.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/OnibusBot/Program.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
+  <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 1
 }</component>
@@ -105,7 +111,7 @@
       <workItem from="1755472980281" duration="5275000" />
       <workItem from="1757131060397" duration="43000" />
       <workItem from="1757163371176" duration="1589000" />
-      <workItem from="1757215858058" duration="2309000" />
+      <workItem from="1757215858058" duration="2913000" />
     </task>
     <servers />
   </component>
@@ -138,6 +144,7 @@
       <select />
     </coverage-tree-state>
   </component>
+  <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
