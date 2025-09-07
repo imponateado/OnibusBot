@@ -12,14 +12,6 @@
 
 OnibusBot is a Telegram bot designed to help users track public bus positions in real-time. The bot provides location updates and periodic notifications for selected bus lines.
 
-### Features
-
-- 🚌 **Real-time bus tracking**: Get current positions of buses of specific lines
-- ⏰ **Periodic notifications**: Get updates every 2 minutes for subscribed lines
-- 🔄 **Direction selection**: Choose between outbound ("IDA") and return ("VOLTA") directions
-- 🛑 **Easy unsubscribe**: Stop notifications with a simple button click
-- 🖥️ **Cross-platform daemon**: Runs as a service on both Linux (systemd) and Windows
-
 ### Prerequisites
 
 - .NET 9.0 or later
@@ -133,14 +125,6 @@ If you encounter any issues or have suggestions, open an issue on the [GitHub re
 ### Visão Geral
 
 OnibusBot é um bot do Telegram projetado para ajudar usuários a acompanhar posições de ônibus públicos em tempo real. O bot fornece atualizações de localização e notificações periódicas para linhas de ônibus selecionadas.
-
-### Funcionalidades
-
-- 🚌 **Rastreamento em tempo real**: Obtenha posições atuais dos ônibus em linhas específicas
-- ⏰ **Notificações periódicas**: Receba atualizações a cada 2 minutos para rotas inscritas
-- 🔄 **Seleção de direção**: Escolha entre direções "IDA" e "VOLTA"
-- 🛑 **Cancelamento fácil**: Pare notificações com um simples clique
-- 🖥️ **Daemon multiplataforma**: Executa como serviço no Linux (systemd) e Windows
 
 ### Pré-requisitos
 
