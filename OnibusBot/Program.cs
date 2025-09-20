@@ -314,8 +314,9 @@ namespace OnibusBot
             {
                 await globalBot.SendLocation(chatId, latitude: (float)bus.Geometry.Coordinates[1],
                     longitude: (float)bus.Geometry.Coordinates[0]);
-                var addressInfo = await GetAddressInfo((float)bus.Geometry.Coordinates[1],
+                var endereco = await GetAddressInfo((float)bus.Geometry.Coordinates[1],
                     (float)bus.Geometry.Coordinates[0]);
+                var addressInfo = $"{linha} :: {endereco}";
                 await globalBot.SendMessage(chatId, addressInfo);
 
                 await Task.Delay(1000, serviceCancellationToken);
