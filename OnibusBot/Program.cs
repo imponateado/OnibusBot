@@ -34,12 +34,12 @@ namespace OnibusBot
                 {
                     logging.ClearProviders();
                     logging.AddConsole();
-                    
+
                     if (OperatingSystem.IsLinux())
                     {
                         logging.AddSystemdConsole();
                     }
-                    
+
                     if (OperatingSystem.IsWindows())
                     {
                         logging.AddEventLog();
@@ -55,7 +55,7 @@ namespace OnibusBot
     {
         private readonly ILogger<OnibusService> _logger;
         private readonly IHttpClientFactory _httpClientFactory;
-        
+
         private List<UserSubscription> userSubscriptions = new List<UserSubscription>();
         private System.Threading.Timer notificationTimer;
         private System.Threading.Timer unsubscribeButtonTimer;
@@ -66,6 +66,7 @@ namespace OnibusBot
         private CleanObjects globalCleanObjects;
         private string versaoDoBot = "1.0.2";
         private CancellationToken serviceCancellationToken;
+        private const int MAX_SUBSCRIPTIONS_PER_USER = 10;
 
         public OnibusService(ILogger<OnibusService> logger, IHttpClientFactory httpClientFactory)
         {
@@ -100,7 +101,6 @@ namespace OnibusBot
                 UltimaPosicao ultimaPosicaoFrota = null;
                 try
                 {
-
                     ultimaPosicaoFrota = await LoadInitialData(apiCall, cleanObjects);
                     _logger.LogInformation("Dados carregados da API com sucesso.");
                 }
@@ -108,7 +108,7 @@ namespace OnibusBot
                 {
                     _logger.LogError($"Erro ao carregar dados de última posição: {ex.Message}");
                 }
-                
+
                 var linhasDisponiveis = await AvailableLines(linhasDeOnibus);
 
                 globalBot = bot;
@@ -155,11 +155,11 @@ namespace OnibusBot
         public override async Task StopAsync(CancellationToken cancellationToken)
         {
             _logger.LogInformation("Parando OnibusBot daemon...");
-            
+
             notificationTimer?.Dispose();
             dataUpdateTimer?.Dispose();
             unsubscribeButtonTimer?.Dispose();
-            
+
             await base.StopAsync(cancellationToken);
             _logger.LogInformation("OnibusBot daemon parado com sucesso.");
         }
@@ -202,11 +202,12 @@ namespace OnibusBot
                 if (callbackData.StartsWith("stop_"))
                 {
                     var removidos = userSubscriptions.RemoveAll(x => x.ChatId == chatId);
-                    
+
                     PararTimerSeNecessario();
-                    
+
                     await bot.SendMessage(chatId, $"✅ Todas as notificações foram canceladas!");
-                    _logger.LogInformation("Notificações canceladas para chat {ChatId}, {Removidos} inscrições removidas", 
+                    _logger.LogInformation(
+                        "Notificações canceladas para chat {ChatId}, {Removidos} inscrições removidas",
                         chatId, removidos);
                     return;
                 }
@@ -242,7 +243,7 @@ namespace OnibusBot
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Erro no OnUpdate para callback {CallbackData}: {Message}", 
+                _logger.LogError(ex, "Erro no OnUpdate para callback {CallbackData}: {Message}",
                     update.CallbackQuery?.Data, ex.Message);
             }
         }
@@ -252,18 +253,21 @@ namespace OnibusBot
         {
             try
             {
-                
                 if (ultimaPosicao == null)
                 {
                     await bot.SendMessage(chatId, "⚠️ Desculpe, o serviço está temporariamente indisponível.");
                     return;
                 }
+
+                var inscricoesUsuario = userSubscriptions.Count(x => x.ChatId == chatId);
+
                 var stopKeyboard = new InlineKeyboardMarkup(new[]
                 {
                     new[] { InlineKeyboardButton.WithCallbackData("❌", $"stop_{chatId}") }
                 });
 
-                var jaExiste = userSubscriptions.Any(x => x.ChatId == chatId && x.Linha == linha && x.Sentido == sentido);
+                var jaExiste =
+                    userSubscriptions.Any(x => x.ChatId == chatId && x.Linha == linha && x.Sentido == sentido);
 
                 if (!jaExiste)
                 {
@@ -273,11 +277,26 @@ namespace OnibusBot
                         Linha = linha,
                         Sentido = sentido
                     });
-                    
+
                     IniciarTimerSeNecessario();
-                    
-                    _logger.LogInformation("Nova inscrição: Chat {ChatId}, Linha {Linha}, Sentido {Sentido}", 
+
+                    _logger.LogInformation("Nova inscrição: Chat {ChatId}, Linha {Linha}, Sentido {Sentido}",
                         chatId, linha, sentido);
+                }
+
+                if (inscricoesUsuario >= MAX_SUBSCRIPTIONS_PER_USER)
+                {
+                    var cancelKeyboard = new InlineKeyboardMarkup(new[]
+                    {
+                        new[]
+                        {
+                            InlineKeyboardButton.WithCallbackData("❌ Cancelar todas as inscrições.", $"stop_{chatId}"),
+                        }
+                    });
+
+                    await bot.SendMessage(chatId,
+                        $"🚫 Você atingiu o limite máximo de {MAX_SUBSCRIPTIONS_PER_USER} linhas monitoradas!\n\nPara adicionar uma nova linha, primeiro cancele algumas das existentes.", replyMarkup:cancelKeyboard);
+                    return;
                 }
 
                 if (jaExiste)
@@ -291,7 +310,8 @@ namespace OnibusBot
                 if (foundObjects.Count == 0)
                 {
                     await bot.SendMessage(chatId,
-                        "As localizações dos ônibus serão enviadas quando algum ônibus em curso for encontrado.\n\nClique no botão abaixo quando não quiser ser mais notificado:", replyMarkup: stopKeyboard);
+                        "As localizações dos ônibus serão enviadas quando algum ônibus em curso for encontrado.\n\nClique no botão abaixo quando não quiser ser mais notificado:",
+                        replyMarkup: stopKeyboard);
                 }
                 else
                 {
@@ -300,7 +320,7 @@ namespace OnibusBot
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Erro ao processar status do ônibus para chat {ChatId}: {Message}", 
+                _logger.LogError(ex, "Erro ao processar status do ônibus para chat {ChatId}: {Message}",
                     chatId, ex.Message);
             }
         }
@@ -333,8 +353,10 @@ namespace OnibusBot
                 {
                     new[] { InlineKeyboardButton.WithCallbackData("❌", $"stop_{chatId}") }
                 });
-                
-                await globalBot.SendMessage(chatId, "Você será notificado de 2 em 2 minutos.\n\nClique no botão abaixo quando não quiser ser mais notificado:", replyMarkup: cancelKeyboard);
+
+                await globalBot.SendMessage(chatId,
+                    "Você será notificado de 2 em 2 minutos.\n\nClique no botão abaixo quando não quiser ser mais notificado:",
+                    replyMarkup: cancelKeyboard);
 
                 var subscription =
                     userSubscriptions.FirstOrDefault(x =>
@@ -355,9 +377,11 @@ namespace OnibusBot
                 {
                     if (ultimaPosicaoFrota == null)
                     {
-                        await bot.SendMessage(message.Chat, "⚠️ Desculpe, o serviço está temporariamente indisponível.");
+                        await bot.SendMessage(message.Chat,
+                            "⚠️ Desculpe, o serviço está temporariamente indisponível.");
                         return;
                     }
+
                     await bot.SendMessage(message.Chat, "Olá!\nQual linha você quer acompanhar?\nexemplos: 175");
                     return;
                 }
@@ -366,9 +390,11 @@ namespace OnibusBot
                 {
                     if (ultimaPosicaoFrota == null)
                     {
-                        await bot.SendMessage(message.Chat, "⚠️ Desculpe, o serviço está temporariamente indisponível.");
+                        await bot.SendMessage(message.Chat,
+                            "⚠️ Desculpe, o serviço está temporariamente indisponível.");
                         return;
                     }
+
                     var linhasEncontradas = await GetMatchingLines(linhaEnviadaPeloUsuario, linhasDisponiveis);
 
                     if (linhasEncontradas.Count < 1)
@@ -387,7 +413,7 @@ namespace OnibusBot
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Erro no OnMessage para chat {ChatId}: {Message}", 
+                _logger.LogError(ex, "Erro no OnMessage para chat {ChatId}: {Message}",
                     message.Chat.Id, ex.Message);
             }
         }
@@ -477,7 +503,8 @@ namespace OnibusBot
                     _logger.LogError("Pulando notificação, últimas posições não disponíveis.");
                     return;
                 }
-                _logger.LogDebug("Iniciando envio de notificações periódicas para {Count} inscrições", 
+
+                _logger.LogDebug("Iniciando envio de notificações periódicas para {Count} inscrições",
                     userSubscriptions.Count);
 
                 foreach (var subscription in userSubscriptions.ToList())
@@ -495,7 +522,7 @@ namespace OnibusBot
                     }
                     catch (Exception ex)
                     {
-                        _logger.LogError(ex, "Erro ao enviar notificação para chat {ChatId}: {Message}", 
+                        _logger.LogError(ex, "Erro ao enviar notificação para chat {ChatId}: {Message}",
                             subscription.ChatId, ex.Message);
                     }
                 }
@@ -524,7 +551,8 @@ namespace OnibusBot
                     }
                     catch (Exception ex)
                     {
-                        _logger.LogError(ex, $"Erro ao enviar botão de desinscrição para chat {subscription.ChatId}: {ex.Message}");
+                        _logger.LogError(ex,
+                            $"Erro ao enviar botão de desinscrição para chat {subscription.ChatId}: {ex.Message}");
                     }
                 }
             }
@@ -546,7 +574,8 @@ namespace OnibusBot
 
                 var novosDados = await LoadInitialData(globalApiCall, globalCleanObjects);
                 globalUltimaPosicao = novosDados;
-                _logger.LogDebug("Dados da frota atualizados com sucesso - {Count} features carregadas para {Subscriptions} subscriptions", 
+                _logger.LogDebug(
+                    "Dados da frota atualizados com sucesso - {Count} features carregadas para {Subscriptions} subscriptions",
                     novosDados?.Features?.Count ?? 0, userSubscriptions.Count);
             }
             catch (Exception ex)
@@ -588,7 +617,8 @@ namespace OnibusBot
             try
             {
                 var httpClient = _httpClientFactory.CreateClient();
-                httpClient.DefaultRequestHeaders.UserAgent.ParseAdd($"OnibusBot/{versaoDoBot} (leoteodoro0@hotmail.com)");
+                httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(
+                    $"OnibusBot/{versaoDoBot} (leoteodoro0@hotmail.com)");
                 var url =
                     $"https://nominatim.openstreetmap.org/reverse?format=json&lat={latitude.ToString(CultureInfo.InvariantCulture)}&lon={longitude.ToString(CultureInfo.InvariantCulture)}";
                 Console.WriteLine($"URL construída {url}");
@@ -612,7 +642,6 @@ namespace OnibusBot
                             parts.Add(nominatinRes?.Address.Suburb);
 
                         return parts.Count > 0 ? string.Join(" ", parts) : "Endereço não disponível";
-
                     }
                 }
             }
