@@ -64,7 +64,7 @@ namespace OnibusBot
         private System.Threading.Timer dataUpdateTimer;
         private ApiCall globalApiCall;
         private CleanObjects globalCleanObjects;
-        private string versaoDoBot = "1.0.2";
+        private string versaoDoBot = "1.0.7";
         private CancellationToken serviceCancellationToken;
         private const int MAX_SUBSCRIPTIONS_PER_USER = 10;
 
@@ -295,7 +295,8 @@ namespace OnibusBot
                     });
 
                     await bot.SendMessage(chatId,
-                        $"🚫 Você atingiu o limite máximo de {MAX_SUBSCRIPTIONS_PER_USER} linhas monitoradas!\n\nPara adicionar uma nova linha, primeiro cancele algumas das existentes.", replyMarkup:cancelKeyboard);
+                        $"🚫 Você atingiu o limite máximo de {MAX_SUBSCRIPTIONS_PER_USER} linhas monitoradas!\n\nPara adicionar uma nova linha, primeiro cancele algumas das existentes.",
+                        replyMarkup: cancelKeyboard);
                     return;
                 }
 
@@ -373,6 +374,9 @@ namespace OnibusBot
         {
             try
             {
+                if (message.Text == "/info")
+                    bot.SendMessage(message.Chat, $"Versão do Bot: {versaoDoBot}");
+
                 if (message.Text == "/start" || message.Text == "oi" || message.Text == "Oi")
                 {
                     if (ultimaPosicaoFrota == null)
