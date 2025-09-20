@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Globalization;
+using System.Net.Http.Headers;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
 using Microsoft.VisualBasic;
@@ -252,7 +253,7 @@ namespace OnibusBot
             try
             {
                 
-                if (ultimaPosicao != null)
+                if (ultimaPosicao == null)
                 {
                     await bot.SendMessage(chatId, "⚠️ Desculpe, o serviço está temporariamente indisponível.");
                     return;
@@ -351,7 +352,7 @@ namespace OnibusBot
             {
                 if (message.Text == "/start" || message.Text == "oi" || message.Text == "Oi")
                 {
-                    if (ultimaPosicaoFrota != null)
+                    if (ultimaPosicaoFrota == null)
                     {
                         await bot.SendMessage(message.Chat, "⚠️ Desculpe, o serviço está temporariamente indisponível.");
                         return;
@@ -362,7 +363,7 @@ namespace OnibusBot
 
                 if (double.TryParse(message.Text, out var linhaEnviadaPeloUsuario))
                 {
-                    if (ultimaPosicaoFrota != null)
+                    if (ultimaPosicaoFrota == null)
                     {
                         await bot.SendMessage(message.Chat, "⚠️ Desculpe, o serviço está temporariamente indisponível.");
                         return;
@@ -586,8 +587,10 @@ namespace OnibusBot
             try
             {
                 var httpClient = _httpClientFactory.CreateClient();
+                httpClient.DefaultRequestHeaders.UserAgent.ParseAdd($"OnibusBot/{versaoDoBot} (leoteodoro0@hotmail.com)");
                 var url =
-                    $"https://nominatim.openstreetmap.org/reverse?lat={latitude.ToString(CultureInfo.InvariantCulture)}&lon={longitude.ToString(CultureInfo.InvariantCulture)}";
+                    $"https://nominatim.openstreetmap.org/reverse?format=json&lat={latitude.ToString(CultureInfo.InvariantCulture)}&lon={longitude.ToString(CultureInfo.InvariantCulture)}";
+                Console.WriteLine($"URL construída {url}");
                 var response = await httpClient.GetAsync(url);
                 if (response.IsSuccessStatusCode)
                 {

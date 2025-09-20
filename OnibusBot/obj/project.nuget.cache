@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "ZIC+h+/rls0=",
+  "dgSpecHash": "1ONH1oiSHOg=",
   "success": true,
   "projectFilePath": "/home/leonardo/RiderProjects/OnibusBot/OnibusBot/OnibusBot.csproj",
   "expectedPackageFiles": [
@@ -114,7 +114,7 @@
     "/home/leonardo/.nuget/packages/system.xml.readerwriter/4.3.0/system.xml.readerwriter.4.3.0.nupkg.sha512",
     "/home/leonardo/.nuget/packages/system.xml.xdocument/4.3.0/system.xml.xdocument.4.3.0.nupkg.sha512",
     "/home/leonardo/.nuget/packages/telegram.bot/22.6.0/telegram.bot.22.6.0.nupkg.sha512",
-    "/home/leonardo/.nuget/packages/microsoft.aspnetcore.app.ref/9.0.8/microsoft.aspnetcore.app.ref.9.0.8.nupkg.sha512"
+    "/home/leonardo/.nuget/packages/microsoft.aspnetcore.app.ref/9.0.9/microsoft.aspnetcore.app.ref.9.0.9.nupkg.sha512"
   ],
   "logs": []
 }

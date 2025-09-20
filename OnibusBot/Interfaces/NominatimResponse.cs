@@ -14,13 +14,13 @@ public class NominatimResponse
     public string? OsmType { get; set; }
     
     [JsonPropertyName("osm_id")]
-    public string? OsmId { get; set; }
+    public long? OsmId { get; set; }
     
     [JsonPropertyName("lat")]
-    public double? Latitude { get; set; }
+    public string? Latitude { get; set; }
     
     [JsonPropertyName("lon")]
-    public double? Longitude { get; set; }
+    public string? Longitude { get; set; }
     
     [JsonPropertyName("class")]
     public string? Class { get; set; }
@@ -47,7 +47,7 @@ public class NominatimResponse
     public Address? Address { get; set; }
     
     [JsonPropertyName("boundingbox")]
-    public List<double>? BoundingBox { get; set; }
+    public List<string>? BoundingBox { get; set; }
 }
 
 public class Address
@@ -67,7 +67,7 @@ public class Address
     [JsonPropertyName("municipality")]
     public string? Municipality { get; set; }
     
-    [JsonPropertyName("country")]
+    [JsonPropertyName("county")]
     public string? County { get; set; }
     
     [JsonPropertyName("state_district")]
